@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useTokenStore } from '@/stores'
+// import { useTokenStore } from '@/stores'
 
 // createRouter 创建路由实例
 // 配置 history 模式
@@ -13,34 +13,43 @@ const router = createRouter({
   routes: [
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
     {
-      path: '/',
-      component: () => import('@/views/layout/LayoutContainer.vue'),
-      redirect: '/UserMange/UserMange.vue',
+      path: '/Mange',
+      component: () => import('@/views/LayoutContainer.vue'),
+      redirect: '/UserMange',
       children: [
         {
-          path: '/TagMange/TagMange.vue',
+          path: '/TagMange',
           component: () => import('@/views/TagMange/TagMange.vue')
-        },{
-          path: '/PostMange/PostMange.vue',
+        },
+        {
+          path: '/PostMange',
           component: () => import('@/views/PostMange/PostMange.vue')
         },
         {
-          path: '/CommentsPart/CommentsPart.vue',
+          path: '/CommentsPart',
           component: () => import('@/views/CommentsPart/CommentsPart.vue')
         },
         {
-          path: '/ResourceMange/ResourceMange.vue',
+          path: '/ResourceMange',
           component: () => import('@/views/ResourceMange/ResourceMange.vue')
+        },
+        {
+          path: '/UserMange',
+          component: () => import('@/views/UserMange/UserMange.vue')
+        },
+        {
+          path: '/MySelf',
+          component: () => import('@/views/MySelf/MySelf.vue')
         }
       ]
     }
   ]
 })
 
-router.beforeEach((to) => {
-  // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行
-  const tokenStore = useTokenStore()
-  if (!tokenStore.accessToken && to.path !== '/login') return '/login'
-})
+// router.beforeEach((to) => {
+//   // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行
+//   const tokenStore = useTokenStore()
+//   if (!tokenStore.accessToken && to.path !== '/login') return '/login'
+// })
 
 export default router

@@ -1,22 +1,21 @@
 <script setup>
 import {
-  Management,
+  Notebook,
   Promotion,
-  UserFilled,
-  User,
-  Crop,
   EditPen,
+  Files,
+  User,
   SwitchButton,
   CaretBottom
 } from '@element-plus/icons-vue'
-import { useUserStore } from '@/stores'
+import { useTokenStore } from '@/stores'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-const userStore = useUserStore()
+const userStore = useTokenStore()
 const router = useRouter()
 
 onMounted(() => {
-  userStore.getUser()
+  // userStore.getUser()
 })
 
 const handleCommand = async (key) => {
@@ -34,7 +33,7 @@ const handleCommand = async (key) => {
     router.push('/login')
   } else {
     // 跳转操作
-    router.push(`/user/${key}`)
+    router.push(`/${key}/${key}`)
   }
 }
 </script>
@@ -50,73 +49,48 @@ const handleCommand = async (key) => {
         text-color="#fff"
         router
       >
-        <el-menu-item index="/article/channel">
-          <el-icon><Management /></el-icon>
+        <el-menu-item index="/UserMange">
+          <el-icon><User /></el-icon>
+          <span>用户管理</span>
+        </el-menu-item>
+        <el-menu-item index="/PostMange">
+          <el-icon><Files /></el-icon>
           <span>帖子管理</span>
         </el-menu-item>
-        <el-menu-item index="/article/manage">
-          <el-icon><Promotion /></el-icon>
+        <el-menu-item index="/CommentsPart">
+          <el-icon><EditPen /></el-icon>
           <span>评论管理</span>
         </el-menu-item>
-        <el-menu-item index="/article/channel">
-          <el-icon><Management /></el-icon>
-          <span>静态资源管理</span>
+        <el-menu-item index="/ResourceMange">
+          <el-icon><Notebook /></el-icon>
+          <span>展示管理</span>
         </el-menu-item>
-        <el-menu-item index="/article/manage">
+        <el-menu-item index="/TagMange">
           <el-icon><Promotion /></el-icon>
           <span>标签管理</span>
         </el-menu-item>
-        <el-menu-item index="/article/channel">
-          <el-icon><Management /></el-icon>
-          <span>用户管理</span>
-        </el-menu-item>
-
-        <el-sub-menu index="/user">
-          <!-- 多级菜单的标题 - 具名插槽 title -->
-          <template #title>
-            <el-icon><UserFilled /></el-icon>
-            <span>个人中心</span>
-          </template>
-
-          <!-- 展开的内容 - 默认插槽 -->
-          <el-menu-item index="/user/profile">
-            <el-icon><User /></el-icon>
-            <span>基本资料</span>
-          </el-menu-item>
-          <el-menu-item index="/user/avatar">
-            <el-icon><Crop /></el-icon>
-            <span>更换头像</span>
-          </el-menu-item>
-          <el-menu-item index="/user/password">
-            <el-icon><EditPen /></el-icon>
-            <span>重置密码</span>
-          </el-menu-item>
-        </el-sub-menu>
+        <!-- <el-menu-item index="/MySelf">
+          <el-icon><Promotion /></el-icon>
+          <span>个人中心</span>
+        </el-menu-item> -->
       </el-menu>
     </el-aside>
     <el-container>
       <el-header>
+        <div class="block" style="margin-right: 10px;">
+          <el-avatar :size="30" src='https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' />
+        </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!-- 展示给用户，默认看到的 -->
           <span class="el-dropdown__box">
             <el-icon><CaretBottom /></el-icon>
           </span>
-
           <!-- 折叠的下拉部分 -->
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile" :icon="User"
-                >基本资料</el-dropdown-item
-              >
-              <el-dropdown-item command="avatar" :icon="Crop"
-                >更换头像</el-dropdown-item
-              >
-              <el-dropdown-item command="password" :icon="EditPen"
-                >重置密码</el-dropdown-item
-              >
-              <el-dropdown-item command="logout" :icon="SwitchButton"
-                >退出登录</el-dropdown-item
-              >
+              <el-dropdown-item command="profile" :icon="User">基本资料</el-dropdown-item>
+              <el-dropdown-item command="password" :icon="EditPen">重置密码</el-dropdown-item>
+              <el-dropdown-item command="logout" :icon="SwitchButton">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -142,10 +116,12 @@ const handleCommand = async (key) => {
     }
   }
   .el-header {
+    padding-right: 10vw;
     background-color: #fff;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: end;
     .el-dropdown__box {
       display: flex;
       align-items: center;
