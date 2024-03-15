@@ -12,17 +12,28 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
-    // {
-    //   path: '/',
-    //   component: () => import('@/views/layout/LayoutContainer.vue'),
-    //   redirect: '/article/manage',
-    //   children: [
-    //     {
-    //       path: '/article/manage',
-    //       component: () => import('@/views/article/ArticleManage.vue')
-    //     }
-    //   ]
-    // }
+    {
+      path: '/',
+      component: () => import('@/views/layout/LayoutContainer.vue'),
+      redirect: '/UserMange/UserMange.vue',
+      children: [
+        {
+          path: '/TagMange/TagMange.vue',
+          component: () => import('@/views/TagMange/TagMange.vue')
+        },{
+          path: '/PostMange/PostMange.vue',
+          component: () => import('@/views/PostMange/PostMange.vue')
+        },
+        {
+          path: '/CommentsPart/CommentsPart.vue',
+          component: () => import('@/views/CommentsPart/CommentsPart.vue')
+        },
+        {
+          path: '/ResourceMange/ResourceMange.vue',
+          component: () => import('@/views/ResourceMange/ResourceMange.vue')
+        }
+      ]
+    }
   ]
 })
 
