@@ -10,7 +10,7 @@ const instance = axios.create({
   baseURL,
   timeout: 10000,
   headers: {
-    "Content-type": "application/json"
+    'Content-type': 'application/json'
   }
 })
 
@@ -26,13 +26,12 @@ instance.interceptors.request.use(
 //短token续签方法
 const refreshThetoken = () => {
   const headerValue = tokenStore.refreshToken
-  return axios.get('/auth/manage/refresh',{
-    headers: {'pass': headerValue}
-  });
-};
+  return axios.get('/auth/manage/refresh', {
+    headers: { pass: headerValue }
+  })
+}
 
-
-// 响应拦截器 
+// 响应拦截器
 instance.interceptors.response.use(
   (res) => {
     if (res.data.code === 200) {
@@ -44,14 +43,14 @@ instance.interceptors.response.use(
   (err) => {
     if (err.data.code === 401) {
       //续签token
-      const response = refreshThetoken();
+      const response = refreshThetoken()
       // 处理数据
       tokenStore.removeAccessToken()
       tokenStore.removeRefreshToken()
       tokenStore.setAccessToken(response.data.access_token)
       tokenStore.setAccessToken(response.data.refresh_token)
       // 再次发送当前请求
-      return axios(err.config);
+      return axios(err.config)
     }
 
     if (err.data.code === 406) {
