@@ -1,24 +1,99 @@
 import request from '@/utils/request'
 
-// 注册接口
-export const userRegisterService = ({ username, password, repassword }) =>
-  request.post('/api/reg', { username, password, repassword })
-
 // 登录接口
-export const userLoginService = ({ username, password }) =>
-  request.post('/api/login', { username, password })
+export const userLoginService = ( data ) =>
+  request.post('/auth/manage/passwordLogin', {
+    data: data
+  })
 
-// 获取用户基本信息
-export const userGetInfoService = () => request.get('/my/userinfo')
 
-// 更新用户基本信息
-export const userUpdateInfoService = ({ id, nickname, email }) =>
-  request.put('/my/userinfo', { id, nickname, email })
+// 退出登录接口
+export const userLogoffService = ( ) =>
+  request.post('/auth/manage/logout')
 
-// 更新用户头像
-export const userUpdateAvatarService = (avatar) =>
-  request.patch('/my/update/avatar', { avatar })
+// 罗列帖子
+export const showPost = (data) =>
+  request.post('/post/manage/list', {
+    data: data
+  })
 
-// 更新用户密码
-export const userUpdatePasswordService = ({ old_pwd, new_pwd, re_pwd }) =>
-  request.patch('/my/updatepwd', { old_pwd, new_pwd, re_pwd })
+  // 删除帖子
+export const deletePost = (data) =>
+  request.post('/post/manage/deletePost', {
+    data: data
+  })
+
+  // 删除评论
+  export const deleteComment = (data) =>
+  request.post('/comment/manage/deleteComment', {
+    data: data
+  })
+
+  // 罗列对于帖子评论
+  export const postComment = (data) =>
+  request.post('/comment/list', {
+    data: data
+  })
+
+  // 罗列目前用户
+  export const postUser = (data) =>
+  request.post('/user/manage/userList', {
+    data: data
+  })
+
+  // 重置用户密码
+  export const resetPasserword = (data) =>
+  request.post('/user/manage/resetPassword', {
+    data: data
+  })
+
+  // 用户封禁
+  export const banUser = (data) =>
+  request.post('/user/manage/block', {
+    data: data
+  })
+
+  // 用户解禁
+  export const releaseUser = (data) =>
+  request.post('/user/manage/release', {
+    data: data
+  })
+
+// 添加管理员
+  export const addAdmin = (data) =>
+  request.post('/user/manage/addAdmin', {
+    data: data
+  })
+
+// 获取标签
+  export const getTags = () =>
+  request.post('/tag/list')
+
+  // 新增标签
+  export const addTag = () =>
+  request.post('/tag/manage/add')
+
+  // 删除标签
+  export const deleteTag = (data) =>
+  request.post('/tag/manage/delete', {
+    data: data
+  })
+
+  // 获取轮播图列表
+  export const getSwipers = () =>
+  request.post('/static/rotatingPic')
+
+  // 新增轮播图
+  export const addSwiper = ( data ) =>
+  request.post('/static/manage/rotatingPic/add',{
+    data: data
+  })
+
+  // 删除轮播图
+  // 新增轮播图
+  export const deleteSwiper = ( data ) =>
+  request.post('/static/manage/rotatingPic/delete',{
+    data: data
+  })
+
+

@@ -8,13 +8,17 @@ const tokenStore = useTokenStore()
 const instance = axios.create({
   // TODO 1. 基础地址，超时时间
   baseURL,
-  timeout: 10000
+  timeout: 10000,
+  headers: {
+    "Content-type": "application/json"
+  }
 })
 
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    // TODO 2. 携带token
+    // 携带短token
+    config.headers['Authorization'] = tokenStore.accessToken
     return config
   },
   (err) => Promise.reject(err)
