@@ -1,18 +1,21 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-// import { useRouter } from 'vue-router'
+import { userLoginService } from '@/api/api.js'
+import { useRouter } from 'vue-router'
+// import { useTokenStore } from '@/stores'
 
-// 整个的用于提交的form数据对象
-const formModel = ref({
-  username: '',
-  password: ''
-})
-// const router = useRouter()
-// const login = async () => {
-//   ElMessage.success('登录成功')
-//   router.push('/')
-// }
+const uid = ref('')
+const password = ref('')
+
+const router = useRouter()
+const login = async () => {
+  const response = userLoginService()
+  //   const tokenStore = useTokenStore()
+  console.log(response)
+  ElMessage.success('登录成功')
+  router.push('/')
+}
 </script>
 
 <template>
@@ -20,26 +23,20 @@ const formModel = ref({
     <el-col :span="12" class="bg"></el-col>
     <el-col :span="6" :offset="3" class="form">
       <!-- 登录相关表单 -->
-      <el-form
-        :model="formModel"
-        :rules="rules"
-        ref="form"
-        size="large"
-        autocomplete="off"
-      >
+      <el-form ref="form" size="large" autocomplete="off">
         <el-form-item>
           <h1>登录</h1>
         </el-form-item>
-        <el-form-item prop="username">
+        <el-form-item prop="uid">
           <el-input
-            v-model="formModel.username"
+            v-model="uid"
             :prefix-icon="User"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="formModel.password"
+            v-model="password"
             name="password"
             :prefix-icon="Lock"
             type="password"
