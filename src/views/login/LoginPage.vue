@@ -5,13 +5,17 @@ import { userLoginService } from '@/api/api.js'
 import { useRouter } from 'vue-router'
 // import { useTokenStore } from '@/stores'
 
-const uid = ref('')
-const password = ref('')
+const data = ref({
+  uid: '',
+  password: ''
+})
 
 const router = useRouter()
 const login = async () => {
-  const response = userLoginService()
-  //   const tokenStore = useTokenStore()
+  const plainObject = data.value
+  const jsonString = JSON.stringify(plainObject)
+  const response = await userLoginService(jsonString)
+  // const tokenStore = useTokenStore()
   console.log(response)
   ElMessage.success('登录成功')
   router.push('/')
@@ -29,14 +33,14 @@ const login = async () => {
         </el-form-item>
         <el-form-item prop="uid">
           <el-input
-            v-model="uid"
+            v-model="data.uid"
             :prefix-icon="User"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="password"
+            v-model="data.password"
             name="password"
             :prefix-icon="Lock"
             type="password"
@@ -68,7 +72,7 @@ const login = async () => {
   height: 100vh;
   background-color: #fff;
   .bg {
-    background: url('@/assets/logo2.png') no-repeat 60% center / 240px auto,
+    background: url('') no-repeat 60% center / 240px auto,
       url('@/assets/login_bg.jpg') no-repeat center / cover;
     border-radius: 0 20px 20px 0;
   }
