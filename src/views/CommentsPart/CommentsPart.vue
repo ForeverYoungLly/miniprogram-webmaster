@@ -1,5 +1,6 @@
-<script setup>
-</script>
+<script setup></script>
 <template>
-    <div class="box"><h1>评论管理</h1></div>
+  <page-contain title="评论管理">
+    <template> 这是表格 </template>
+  </page-contain>
 </template>

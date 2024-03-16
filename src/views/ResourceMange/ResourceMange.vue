@@ -1,4 +1,6 @@
 <script setup></script>
 <template>
-  <div class="box"><h1>资源管理</h1></div>
+  <page-contain title="展示管理">
+    <template> 这是静态资源 </template>
+  </page-contain>
 </template>

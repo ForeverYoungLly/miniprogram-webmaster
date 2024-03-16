@@ -1,5 +1,6 @@
-<script setup>
-</script>
+<script setup></script>
 <template>
-    <div class="box"><h1>标签管理</h1></div>
+  <page-contain title="所有标签">
+    <template> 这是表格 </template>
+  </page-contain>
 </template>

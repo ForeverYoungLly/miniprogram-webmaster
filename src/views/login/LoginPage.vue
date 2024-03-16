@@ -18,7 +18,7 @@ const login = async () => {
   // const tokenStore = useTokenStore()
   console.log(response)
   ElMessage.success('登录成功')
-  router.push('/')
+  router.push('/Mange')
 }
 </script>
 
