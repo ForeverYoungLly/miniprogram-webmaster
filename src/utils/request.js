@@ -9,14 +9,13 @@ const instance = axios.create({
   baseURL: 'http://8.146.208.139:10010',
   timeout: 10000,
   headers: {
-    'Content-type': 'application/json'
+    'Content-Type': 'application/json'
   }
 })
 
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    // 携带短token
     return config
   },
   (err) => Promise.reject(err)
@@ -32,11 +31,11 @@ const refreshThetoken = () => {
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
-    if (res.data.code === 200) {
-      return res
+    if (res.data.code == 200) {
+      // code值为 0 或 200 时视为成功
+      return Promise.resolve(res.data)
     }
-    ElMessage.error(res.data.message || '服务异常')
-    return Promise.reject(res.data)
+    return Promise.reject(res)
   },
   (err) => {
     if (err.data.code === 401) {

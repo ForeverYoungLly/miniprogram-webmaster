@@ -17,10 +17,11 @@ const login = async () => {
     uid: LoginData.value.uid,
     password: LoginData.value.password
   }
-  console.log(data)
-  let res = await userLoginService(data)
-  console.log(res)
-  router.push('/')
+  let res = await userLoginService(JSON.stringify(data))
+  const tokenStore = useTokenStore()
+  tokenStore.setAccessToken(res.data.access_token)
+  tokenStore.setRefreshToken(res.data.refresh_token)
+  router.push('/Manage')
 }
 </script>
 

@@ -49,11 +49,11 @@ const handleCommand = async (key) => {
         text-color="#fff"
         router
       >
-        <el-menu-item index="/UserMange">
+        <el-menu-item index="/UserManage">
           <el-icon><User /></el-icon>
           <span>用户管理</span>
         </el-menu-item>
-        <el-menu-item index="/PostMange">
+        <el-menu-item index="/PostManage">
           <el-icon><Files /></el-icon>
           <span>帖子管理</span>
         </el-menu-item>
@@ -61,11 +61,11 @@ const handleCommand = async (key) => {
           <el-icon><EditPen /></el-icon>
           <span>评论管理</span>
         </el-menu-item>
-        <el-menu-item index="/ResourceMange">
+        <el-menu-item index="/ResourceManage">
           <el-icon><Notebook /></el-icon>
           <span>展示管理</span>
         </el-menu-item>
-        <el-menu-item index="/TagMange">
+        <el-menu-item index="/TagManage">
           <el-icon><Promotion /></el-icon>
           <span>标签管理</span>
         </el-menu-item>
@@ -77,8 +77,11 @@ const handleCommand = async (key) => {
     </el-aside>
     <el-container>
       <el-header>
-        <div class="block" style="margin-right: 10px;">
-          <el-avatar :size="30" src='https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' />
+        <div class="block" style="margin-right: 10px">
+          <el-avatar
+            :size="30"
+            src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          />
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!-- 展示给用户，默认看到的 -->
@@ -88,9 +91,15 @@ const handleCommand = async (key) => {
           <!-- 折叠的下拉部分 -->
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile" :icon="User">基本资料</el-dropdown-item>
-              <el-dropdown-item command="password" :icon="EditPen">重置密码</el-dropdown-item>
-              <el-dropdown-item command="logout" :icon="SwitchButton">退出登录</el-dropdown-item>
+              <el-dropdown-item command="profile" :icon="User"
+                >基本资料</el-dropdown-item
+              >
+              <el-dropdown-item command="password" :icon="EditPen"
+                >重置密码</el-dropdown-item
+              >
+              <el-dropdown-item command="logout" :icon="SwitchButton"
+                >退出登录</el-dropdown-item
+              >
             </el-dropdown-menu>
           </template>
         </el-dropdown>
