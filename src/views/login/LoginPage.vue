@@ -3,21 +3,23 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { userLoginService } from '@/api/api.js'
 import { useRouter } from 'vue-router'
-// import { useTokenStore } from '@/stores'
+import { useTokenStore } from '@/stores'
 
-const data = ref({
+const LoginData = ref({
   uid: '',
   password: ''
 })
 
 const router = useRouter()
 const login = async () => {
-  const plainObject = data.value
-  const jsonString = JSON.stringify(plainObject)
-  const response = await userLoginService(jsonString)
-  // const tokenStore = useTokenStore()
-  console.log(response)
-  ElMessage.success('登录成功')
+  // 定义要发送的数据
+  const data = {
+    uid: LoginData.value.uid,
+    password: LoginData.value.password
+  }
+  console.log(data)
+  let res = await userLoginService(data)
+  console.log(res)
   router.push('/')
 }
 </script>
@@ -33,14 +35,14 @@ const login = async () => {
         </el-form-item>
         <el-form-item prop="uid">
           <el-input
-            v-model="data.uid"
+            v-model="LoginData.uid"
             :prefix-icon="User"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="data.password"
+            v-model="LoginData.password"
             name="password"
             :prefix-icon="Lock"
             type="password"

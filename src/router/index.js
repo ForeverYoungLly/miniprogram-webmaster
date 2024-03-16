@@ -20,7 +20,8 @@ const router = createRouter({
         {
           path: '/TagMange/TagMange.vue',
           component: () => import('@/views/TagMange/TagMange.vue')
-        },{
+        },
+        {
           path: '/PostMange/PostMange.vue',
           component: () => import('@/views/PostMange/PostMange.vue')
         },

@@ -2,12 +2,11 @@ import axios from 'axios'
 import { useTokenStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-const baseURL = 'http://8.146.208.139:10010'
 const tokenStore = useTokenStore()
 
 const instance = axios.create({
   // TODO 1. 基础地址，超时时间
-  baseURL,
+  baseURL: 'http://8.146.208.139:10010',
   timeout: 10000,
   headers: {
     'Content-type': 'application/json'
@@ -18,7 +17,6 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // 携带短token
-    config.headers['Authorization'] = tokenStore.accessToken
     return config
   },
   (err) => Promise.reject(err)
@@ -64,4 +62,3 @@ instance.interceptors.response.use(
 )
 
 export default instance
-export { baseURL }

@@ -1,10 +1,13 @@
 import request from '@/utils/request'
 
 // 登录接口
-export const userLoginService = (data) =>
-  request.post('/auth/manage/passwordLogin', {
-    data: data
+export const userLoginService = (data) => {
+  request.post('/auth/manage/passwordLogin', data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
+}
 
 // 退出登录接口
 export const userLogoffService = () => request.post('/auth/manage/logout')
