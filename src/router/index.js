@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import { useTokenStore } from '@/stores'
+import { useTokenStore } from '@/stores'
 
 // createRouter 创建路由实例
 // 配置 history 模式
@@ -13,29 +13,29 @@ const router = createRouter({
   routes: [
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
     {
-      path: '/Mange',
+      path: '/Manage',
       component: () => import('@/views/LayoutContainer.vue'),
-      redirect: '/UserMange',
+      redirect: '/UserManage',
       children: [
         {
-          path: '/TagMange',
-          component: () => import('@/views/TagMange/TagMange.vue')
+          path: '/TagManage',
+          component: () => import('@/views/TagManage/TagManage.vue')
         },
         {
-          path: '/PostMange',
-          component: () => import('@/views/PostMange/PostMange.vue')
+          path: '/PostManage',
+          component: () => import('@/views/PostManage/PostManage.vue')
         },
         {
           path: '/CommentsPart',
           component: () => import('@/views/CommentsPart/CommentsPart.vue')
         },
         {
-          path: '/ResourceMange',
-          component: () => import('@/views/ResourceMange/ResourceMange.vue')
+          path: '/ResourceManage',
+          component: () => import('@/views/ResourceManage/ResourceManage.vue')
         },
         {
-          path: '/UserMange',
-          component: () => import('@/views/UserMange/UserMange.vue')
+          path: '/UserManage',
+          component: () => import('@/views/UserManage/UserManage.vue')
         },
         {
           path: '/MySelf',
@@ -46,10 +46,10 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach((to) => {
-//   // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行
-//   const tokenStore = useTokenStore()
-//   if (!tokenStore.accessToken && to.path !== '/login') return '/login'
-// })
+router.beforeEach((to) => {
+  // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行
+  const tokenStore = useTokenStore()
+  if (!tokenStore.accessToken && to.path !== '/login') return '/login'
+})
 
 export default router
