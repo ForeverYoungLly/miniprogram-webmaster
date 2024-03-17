@@ -9,7 +9,10 @@ export const userLogoffService = () => request.post('/auth/manage/logout')
 // 罗列帖子
 export const showPost = (data) =>
   request.post('/post/manage/list', {
-    data: data
+    data: data,
+    headers:{
+      access_token: JSON.parse(localStorage.getItem('token')).access_token
+    }
   })
 
 // 删除帖子
