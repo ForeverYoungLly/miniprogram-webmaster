@@ -76,7 +76,7 @@ const login = async () => {
   background-color: #fff;
   .bg {
     background: url('') no-repeat 60% center / 240px auto,
-      url('@/assets/login_bg.jpg') no-repeat center / cover;
+      url('') no-repeat center / cover;
     border-radius: 0 20px 20px 0;
   }
   .form {

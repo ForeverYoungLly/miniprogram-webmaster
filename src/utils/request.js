@@ -38,7 +38,7 @@ instance.interceptors.response.use(
     return Promise.reject(res)
   },
   (err) => {
-    if (err.data.code === 401) {
+    if (err.data.code === 402) {
       //续签token
       const response = refreshThetoken()
       // 处理数据
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
       return axios(err.config)
     }
 
-    if (err.data.code === 406) {
+    if (err.data.code === 406 || err.data.code === 401) {
       router.push('/login')
     }
 
