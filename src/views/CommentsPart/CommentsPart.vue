@@ -1,3 +1,3 @@
 <template>
-  <h1></h1>
+  <page-contain title="评论管理"> </page-contain>
 </template>
