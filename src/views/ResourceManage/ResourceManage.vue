@@ -1,4 +1,4 @@
 <script setup></script>
 <template>
-  <div class="box"><h1>资源管理</h1></div>
+  <page-contain title="资源管理"> </page-contain>
 </template>

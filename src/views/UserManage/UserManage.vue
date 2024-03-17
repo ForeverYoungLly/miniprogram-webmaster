@@ -1,4 +1,4 @@
 <script setup></script>
 <template>
-  <div class="box"><h1>人员管理</h1></div>
+  <page-contain title="用户管理"> </page-contain>
 </template>
