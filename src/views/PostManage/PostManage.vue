@@ -25,6 +25,7 @@ let dataMess = ref({
   status: ''
 })
 const getPost = async () => {
+  console.log(JSON.parse(localStorage.getItem('token')).accessToken)
   const res = await showPost(dataMess)
   console.log(res)
 }
