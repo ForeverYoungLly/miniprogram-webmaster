@@ -1,6 +1,4 @@
 <script setup></script>
 <template>
-  <div class="box">
-    <h1>帖子管理</h1>
-  </div>
+  <page-contain title="帖子管理"> </page-contain>
 </template>
