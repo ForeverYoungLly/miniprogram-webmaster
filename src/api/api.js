@@ -1,4 +1,8 @@
 import request from '@/utils/request'
+import { useTokenStore } from '@/stores'
+
+const tokenStore = useTokenStore()
+const value = tokenStore.accessToken
 
 // 登录接口
 export const userLoginService = (data) =>
@@ -7,10 +11,7 @@ export const userLoginService = (data) =>
 export const userLogoffService = () => request.post('/auth/manage/logout')
 
 // 罗列帖子
-export const showPost = (data) =>
-  request.post('/post/manage/list', {
-    data: data
-  })
+export const showPost = (data) => request.post('/post/manage/list', data)
 
 // 删除帖子
 export const deletePost = (data) =>
