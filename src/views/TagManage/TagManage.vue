@@ -1,4 +1,6 @@
 <script setup></script>
 <template>
-  <div class="box"><h1>标签管理</h1></div>
+  <page-contain title="展示管理">
+    <template> 标签管理</template>
+  </page-contain>
 </template>
