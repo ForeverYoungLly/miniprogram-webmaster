@@ -11,12 +11,10 @@ import {
 import { useTokenStore } from '@/stores'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-const userStore = useTokenStore()
+const tokenStore = useTokenStore()
 const router = useRouter()
 
-onMounted(() => {
-  // userStore.getUser()
-})
+onMounted(() => {})
 
 const handleCommand = async (key) => {
   if (key === 'logout') {
@@ -28,8 +26,8 @@ const handleCommand = async (key) => {
     })
 
     // 清除本地的数据 (token + user信息)
-    userStore.removeToken()
-    userStore.setUser({})
+    tokenStore.removeAccessToken()
+    tokenStore.removeRefreshToken()
     router.push('/login')
   } else {
     // 跳转操作
@@ -69,10 +67,6 @@ const handleCommand = async (key) => {
           <el-icon><Promotion /></el-icon>
           <span>标签管理</span>
         </el-menu-item>
-        <!-- <el-menu-item index="/MySelf">
-          <el-icon><Promotion /></el-icon>
-          <span>个人中心</span>
-        </el-menu-item> -->
       </el-menu>
     </el-aside>
     <el-container>

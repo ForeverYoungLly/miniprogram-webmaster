@@ -32,13 +32,13 @@ const refreshThetoken = () => {
 instance.interceptors.response.use(
   (res) => {
     if (res.data.code == 200) {
-      // code值为 0 或 200 时视为成功
+      // code值为200时视为成功
       return Promise.resolve(res.data)
     }
     return Promise.reject(res)
   },
   (err) => {
-    if (err.data.code === 401) {
+    if (err.data.code === 402) {
       //续签token
       const response = refreshThetoken()
       // 处理数据
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
       return axios(err.config)
     }
 
-    if (err.data.code === 406) {
+    if (err.data.code === 406 || err.data.code === 401) {
       router.push('/login')
     }
 
