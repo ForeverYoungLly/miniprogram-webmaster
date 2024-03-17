@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import { useTokenStore } from '@/stores'
 import { userLoginService } from '@/api/api.js'
 import { useRouter } from 'vue-router'
-// import { useTokenStore } from '@/stores'
 
 const LoginData = ref({
   uid: '',
