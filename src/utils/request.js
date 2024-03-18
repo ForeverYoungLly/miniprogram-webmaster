@@ -9,8 +9,7 @@ const instance = axios.create({
   baseURL: 'http://8.146.208.139:10010',
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
-    accessToken: tokenStore.accessToken
+    'Content-Type': 'application/json'
   }
 })
 

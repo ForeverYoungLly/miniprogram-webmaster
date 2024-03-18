@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-// 用户模块 token setToken removeToken
+//  token setToken removeToken
 export const useTokenStore = defineStore(
   'token',
   () => {
@@ -28,6 +28,28 @@ export const useTokenStore = defineStore(
       removeAccessToken,
       setRefreshToken,
       removeRefreshToken
+    }
+  },
+  {
+    persist: true
+  }
+)
+
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    const uerUid = ref('')
+    const setUid = (uid) => {
+      uerUid.value = uid
+    }
+    const removeUid = () => {
+      uerUid.value = ''
+    }
+
+    return {
+      uerUid,
+      setUid,
+      removeUid
     }
   },
   {
