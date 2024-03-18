@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import { postUser, banUser, releaseUser, addAdmin, delAdmin } from '@/api/api'
 let input = ref('')
 let premissions = ref('')
 let searchType = ref('')
@@ -11,21 +11,19 @@ let totalNum = ref(0)
 let pageSize = 8
 const getUser = (data) => {
   loading.value = true
-  axios({
-    url: 'http://8.146.208.139:10010/user/manage/userList',
-    method: 'POST',
-    data,
-    headers: {
-      access_token: JSON.parse(localStorage.getItem('token')).accessToken
-    }
-  })
+  postUser(data)
     .then((res) => {
       loading.value = false
-      if (res.data.code != 200) {
+      if (res.code != 200) {
         ElMessage.error('获取失败')
       } else {
-        UserList.value = res.data.data.rows
-        totalNum.value = res.data.data.total
+        let list = res.data.rows
+        list.forEach(function (element) {
+          if (element.sex === 0) element.sex = '男'
+          else element.sex = '女'
+        })
+        UserList.value = res.data.rows
+        totalNum.value = res.data.total
       }
     })
     .catch((err) => {
@@ -48,15 +46,7 @@ const CancelManger = (uid) => {
     uid: uid,
     type: 0
   }
-  axios({
-    method: 'POST',
-    data: data,
-    headers: {
-      'Content-Type': 'application/json',
-      access_token: JSON.parse(localStorage.getItem('token')).accessToken
-    },
-    url: 'http://8.146.208.139:10010/user/manage/administrator'
-  })
+  delAdmin(data)
     .then((res) => {
       loading.value = false
       console.log(res)
@@ -64,6 +54,11 @@ const CancelManger = (uid) => {
         message: '修改成功',
         type: 'success'
       })
+      let data = {
+        pageNum: pageNum.value,
+        pageSize: pageSize
+      }
+      getUser(data)
     })
     .catch((err) => {
       loading.value = false
@@ -78,14 +73,7 @@ const SetManager = (uid) => {
     uid: uid,
     type: 1
   }
-  axios({
-    method: 'POST',
-    data: data,
-    headers: {
-      access_token: JSON.parse(localStorage.getItem('token')).accessToken
-    },
-    url: 'http://8.146.208.139:10010/user/manage/administrator'
-  })
+  addAdmin(data)
     .then((res) => {
       loading.value = false
       console.log(res)
@@ -93,6 +81,11 @@ const SetManager = (uid) => {
         message: '修改成功',
         type: 'success'
       })
+      let data = {
+        pageNum: pageNum.value,
+        pageSize: pageSize
+      }
+      getUser(data)
     })
     .catch((err) => {
       loading.value = false
@@ -107,21 +100,19 @@ const BanUser = (uid) => {
     uid: uid,
     status: 1
   }
-  axios({
-    method: 'POST',
-    data: data,
-    headers: {
-      access_token: JSON.parse(localStorage.getItem('token')).accessToken
-    },
-    url: 'http://8.146.208.139:10010/user/manage/status/change'
-  })
+  banUser(data)
     .then((res) => {
-      loading.value = false
-      console.log(res)
       ElMessage({
-        message: '禁用成功',
+        message: '修改成功',
         type: 'success'
       })
+      loading.value = false
+      console.log(res)
+      let data = {
+        pageNum: pageNum.value,
+        pageSize: pageSize
+      }
+      getUser(data)
     })
     .catch((err) => {
       loading.value = false
@@ -136,27 +127,46 @@ const CancelBan = (uid) => {
     uid: uid,
     status: 0
   }
-  axios({
-    method: 'POST',
-    data: data,
-    headers: {
-      access_token: JSON.parse(localStorage.getItem('token')).accessToken
-    },
-    url: 'http://8.146.208.139:10010/user/manage/status/change'
-  })
+  releaseUser(data)
     .then((res) => {
-      loading.value = false
-      console.log(res)
       ElMessage({
-        message: '禁用成功',
+        message: '修改成功',
         type: 'success'
       })
+      loading.value = false
+      console.log(res)
+      let data = {
+        pageNum: pageNum.value,
+        pageSize: pageSize
+      }
+      getUser(data)
     })
     .catch((err) => {
       loading.value = false
       console.log(err)
       ElMessage.error('禁用失败')
     })
+}
+//分页换页
+const handleCurrentChange = (num) => {
+  // console.log(num)
+  let data = ref({})
+  if (searchType.value == 0) {
+    data.value = {
+      pageNum: num,
+      pageSize: pageSize,
+      type: premissions.value,
+      userName: input.value
+    }
+  } else {
+    data.value = {
+      pageNum: num,
+      pageSize: pageSize,
+      type: premissions.value,
+      uid: input.value
+    }
+  }
+  getUser(data.value)
 }
 //搜索
 const Search = () => {
@@ -232,7 +242,7 @@ const refresh = () => {
       ></el-table-column>
       <el-table-column
         label="手机号"
-        prop="phonenumber"
+        prop="phoneNumber"
         align="center"
         width="220"
       ></el-table-column>
@@ -256,18 +266,47 @@ const refresh = () => {
       </el-table-column>
       <el-table-column label="操作" align="center" width="250">
         <template #default="{ row }">
-          <el-button type="info" round v-if="row.type == 1"
+          <el-button
+            type="info"
+            round
+            v-if="row.type == 1"
+            @click="CancelManger(row.uid)"
             >取消管理员</el-button
           >
-          <el-button type="primary" round v-else>设为管理员</el-button>
-          <el-button type="danger" round v-if="row.status == 0">封禁</el-button>
-          <el-button type="warning" round v-else>解禁</el-button>
+          <el-button type="primary" round v-else @click="SetManager(row.uid)"
+            >设为管理员</el-button
+          >
+          <el-button
+            type="danger"
+            round
+            v-if="row.status == 0"
+            @click="BanUser(row.uid)"
+            >封禁</el-button
+          >
+          <el-button type="warning" round v-else @click="CancelBan(row.uid)"
+            >解禁</el-button
+          >
         </template>
       </el-table-column>
       <template #empty>
         <el-empty description="暂无数据" />
       </template>
     </el-table>
+    <!-- f分页 -->
+    <div class="fenye">
+      <el-pagination
+        v-model:current-page="currentPage3"
+        v-model:page-size="pageSize"
+        :background="background"
+        layout="prev, pager, next, jumper"
+        :total="totalNum"
+        @current-change="handleCurrentChange(currentPage3)"
+      />
+    </div>
   </page-contain>
 </template>
-<style scoped></style>
+<style scoped>
+.fenye {
+  margin-top: 5vh;
+}
+</style>

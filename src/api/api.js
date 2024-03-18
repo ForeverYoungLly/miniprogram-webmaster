@@ -16,6 +16,15 @@ export const userLoginService = (data) =>
 // 退出登录接口
 export const userLogoffService = () => request.post('/auth/manage/logout')
 
+//展示帖子 详情
+export const showPostDetail = (id) => {
+  return request.get(`/post/list/${id}`, {
+    headers: {
+      access_token: tokenStore.accessToken,
+      'Content-Type': 'application/json'
+    }
+  })
+}
 // 罗列帖子
 export const showPost = (data) => {
   return request.post('/post/manage/list', data, {
@@ -73,7 +82,7 @@ export const resetPasserword = (data) =>
 
 // 用户封禁
 export const banUser = (data) =>
-  request.post('/user/manage/block', data, {
+  request.post('/user/manage/status/change', data, {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
@@ -82,7 +91,7 @@ export const banUser = (data) =>
 
 // 用户解禁
 export const releaseUser = (data) =>
-  request.post('/user/manage/release', data, {
+  request.post('/user/manage/status/change', data, {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
@@ -91,13 +100,20 @@ export const releaseUser = (data) =>
 
 // 添加管理员
 export const addAdmin = (data) =>
-  request.post('/user/manage/addAdmin', data, {
+  request.post('/user/manage/administrator', data, {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
     }
   })
-
+//删除管理员
+export const delAdmin = (data) =>
+  request.post('/user/manage/administrator', data, {
+    headers: {
+      access_token: tokenStore.accessToken,
+      'Content-Type': 'application/json'
+    }
+  })
 // 获取标签
 export const getTags = () => {
   const data = ref('')

@@ -1,13 +1,26 @@
 <script setup>
 import axios from 'axios'
 import { onMounted, ref } from 'vue'
+import { showPostDetail } from '../../api/api'
 import { DeleteFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 const selectedType = ref('')
 const selectedStatus = ref('')
 let loading = ref(false)
 let total = ref(0)
 let pageSize3 = 8
 let input = ref('')
+let form = ref({
+  title: '',
+  nickname: '',
+  meetAddress: '',
+  status: 0,
+  tag: '',
+  imgList: [],
+  beginTime: '',
+  endTime: '',
+  content: ''
+})
 let drawer = ref(false) //控制大抽屉
 let innerDrawer = ref(false) //控制小抽屉
 const TypeList = ref([
@@ -61,22 +74,21 @@ const TypeList = ref([
   }
 ])
 let PostList = ref([])
-const urls = ref([
-  'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
-  'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
-  'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-  'https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg',
-  'https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg',
-  'https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg',
-  'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
-])
-let form = ref({
-  title: '打篮球哇',
-  nickname: 'Ye',
-  meetAddress: '松山湖体育馆',
-  status: 0,
-  tag: '篮球'
-})
+const ShowDetail = (id) => {
+  loading.value = true
+  showPostDetail(id)
+    .then((res) => {
+      console.log(res)
+      console.log(splitImg(res.data.content))
+      loading.value = false
+      drawer.value = true
+    })
+    .catch((err) => {
+      console.log(err)
+      loading.value = false
+      ElMessage.error('获取错误')
+    })
+}
 const refresh = () => {
   input.value = ''
   selectedStatus.value = ''
@@ -126,6 +138,40 @@ onMounted(() => {
   }
   GetPost(data)
 })
+const handleCurrentChange = (num) => {
+  // console.log(num)
+  let data = ref('')
+  if (selectedStatus.value == '' && selectedType.value == '') {
+    data.value = {
+      pageNum: num,
+      pageSize: 8,
+      q: input.value
+    }
+  } else if (selectedStatus.value != '' && selectedType.value == '') {
+    data.value = {
+      pageNum: num,
+      pageSize: 8,
+      status: selectedStatus,
+      q: input.value
+    }
+  } else if (selectedStatus.value == '' && selectedType.value != '') {
+    data.value = {
+      pageNum: num,
+      pageSize: 8,
+      tagid: selectedType,
+      q: input.value
+    }
+  } else {
+    data.value = {
+      pageNum: num,
+      pageSize: 8,
+      status: selectedStatus,
+      tagid: selectedType,
+      q: input.value
+    }
+  }
+  GetPost(data.value)
+}
 const Search = () => {
   let data = ref('')
   if (selectedStatus.value == '' && selectedType.value == '') {
@@ -158,6 +204,17 @@ const Search = () => {
     }
   }
   GetPost(data.value)
+}
+const splitImg = (StringCon) => {
+  //切割图像数组
+  let content = StringCon.split('**/img/**')
+  let con = content[0].split('**/rank/**')[0]
+  let imgList = content[1].split(',')
+  let re = {
+    imgList: imgList,
+    content: con
+  }
+  return re
 }
 </script>
 
@@ -232,8 +289,10 @@ const Search = () => {
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="{ row }">
-          <el-button type="primary" round>查看</el-button>
-          <el-button type="danger" round>删除</el-button>
+          <el-button type="primary" round @click="ShowDetail(row.id)"
+            >查看</el-button
+          >
+          <el-button type="danger" round @click="Show(row.id)">删除</el-button>
         </template>
       </el-table-column>
 
@@ -251,7 +310,7 @@ const Search = () => {
         :background="background"
         layout="prev, pager, next, jumper"
         :total="total"
-        @current-change="handleCurrentChange"
+        @current-change="handleCurrentChange(currentPage3)"
       />
     </div>
 
