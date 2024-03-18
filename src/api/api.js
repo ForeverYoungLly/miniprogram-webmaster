@@ -4,7 +4,6 @@ import request from '@/utils/request'
 
 // const tokenStore = useTokenStore()
 // const value = tokenStore.accessToken
-
 // 登录接口
 export const userLoginService = (data) =>
   request.post('/auth/manage/passwordLogin', data)

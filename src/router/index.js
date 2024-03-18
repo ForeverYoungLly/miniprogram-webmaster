@@ -12,11 +12,15 @@ const router = createRouter({
     {
       path: '/Manage',
       component: () => import('@/views/LayoutContainer.vue'),
-      redirect: '/UserManage',
+      redirect: '/AllData',
       children: [
         {
           path: '/TagManage',
           component: () => import('@/views/TagManage/TagManage.vue')
+        },
+        {
+          path: '/AllData',
+          component: () => import('@/views/AllData/AllData.vue')
         },
         {
           path: '/PostManage',

@@ -6,7 +6,8 @@ import {
   Files,
   User,
   SwitchButton,
-  CaretBottom
+  CaretBottom,
+  Histogram
 } from '@element-plus/icons-vue'
 import { useTokenStore } from '@/stores'
 import { onMounted } from 'vue'
@@ -47,6 +48,10 @@ const handleCommand = async (key) => {
         text-color="#fff"
         router
       >
+      <el-menu-item index="/AllData">
+        <el-icon><Histogram /></el-icon>
+          <span>用户数据</span>
+        </el-menu-item>
         <el-menu-item index="/UserManage">
           <el-icon><User /></el-icon>
           <span>用户管理</span>

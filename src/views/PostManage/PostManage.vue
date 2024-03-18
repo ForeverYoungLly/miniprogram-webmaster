@@ -1,11 +1,15 @@
 <script setup>
+import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { DeleteFilled } from '@element-plus/icons-vue'
-import { showPost } from '../../api/api'
 const selectedType = ref('')
-const selectedStatus = ref('0')
-let drawer = ref(true) //控制大抽屉
-let innerDrawer = ref(true) //控制小抽屉
+const selectedStatus = ref('')
+let loading = ref(false)
+let total = ref(0)
+let pageSize3 = 8
+let input=ref('')
+let drawer = ref(false) //控制大抽屉
+let innerDrawer = ref(false) //控制小抽屉
 const TypeList = ref([
   {
     label: '篮球',
@@ -56,64 +60,7 @@ const TypeList = ref([
     value: 11
   }
 ])
-let PostList = ref([
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  },
-  {
-    nickname: 'Ye',
-    title: '打篮球拉',
-    type: '篮球',
-    status: '匹配中',
-    avatar: 'http://8.146.208.139:3000/avator/1709974133978.jpg'
-  }
-])
+let PostList = ref([])
 const urls = ref([
   'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
   'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
@@ -130,9 +77,88 @@ let form = ref({
   status: 0,
   tag: '篮球'
 })
+const refresh=()=>{
+  input.value=''
+  selectedStatus.value=''
+  selectedType.value=''
+}
+const GetPost = (data) => {
+  loading.value = true
+  axios({
+    method: 'POST',
+    data: data,
+    url: 'http://8.146.208.139:10010/post/manage/list',
+    headers: {
+      'Content-Type': 'application/json',
+      access_token: JSON.parse(localStorage.getItem('token')).accessToken
+    }
+  })
+    .then((res) => {
+      loading.value = false
+      if (res.data.code != '200') {
+        ElMessage.error('获取失败')
+      }else{
+        total.value = res.data.data.total
+      PostList.value = []
+      res.data.data.rows.forEach((item) => {
+        PostList.value.push({
+          id: item.id,
+          avatar: item.posterAvatar,
+          nickname: item.posterUsername,
+          title: item.title,
+          type: item.tags[0].name,
+          status: item.status
+        })
+      })
+      }
+    })
+    .catch((err) => {
+      loading.value = false
+      ElMessage.error('获取失败')
+      console.log(err)
+    })
+}
 onMounted(() => {
-  showPost()
+  let data = {
+    pageNum: 1,
+    pageSize: 8,
+    status: 0
+  }
+  GetPost(data)
 })
+const Search = () => {
+  let data = ref('')
+  if (selectedStatus.value == '' && selectedType.value == '') {
+    data.value = {
+      pageNum: 1,
+      pageSize: 8,
+      q:input.value
+    }
+  } else if (selectedStatus.value != '' && selectedType.value == '') {
+    data.value = {
+      pageNum: 1,
+      pageSize: 8,
+      status: selectedStatus,
+      q:input.value
+    }
+  } else if (selectedStatus.value == '' && selectedType.value != '') {
+    data.value = {
+      pageNum: 1,
+      pageSize: 8,
+      tagid: selectedType,
+      q:input.value
+    }
+  } else {
+    data.value = {
+      pageNum: 1,
+      pageSize: 8,
+      status: selectedStatus,
+      tagid: selectedType,
+      q:input.value
+    }
+  }
+  GetPost(data.value)
+}
 </script>
 
 <template>
@@ -152,15 +178,30 @@ onMounted(() => {
         <el-select v-model="selectedStatus" placeholder="请选择">
           <el-option label="匹配中" value="0"></el-option>
           <el-option label="已完成" value="1"></el-option>
+          <el-option label="挂起" value="2"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="搜索:">
+        <el-input
+          v-model="input"
+          style="width: 240px"
+          placeholder="Please input"
+        />
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary">重置</el-button>
+        <el-button type="primary" @click="Search">搜索</el-button>
+        <el-button @click="refresh">重置</el-button>
       </el-form-item>
     </el-form>
 
     <!-- 表格部分 -->
-    <el-table :data="PostList" width="100%">
+    <el-table :data="PostList" v-loading="loading" width="100%">
+      <el-table-column
+        label="ID"
+        prop="id"
+        align="center"
+        width="50"
+      ></el-table-column>
       <el-table-column label="头像" align="center" width="80">
         <template #default="{ row }">
           <el-avatar :src="row.avatar" />
@@ -185,10 +226,8 @@ onMounted(() => {
       </el-table-column>
       <el-table-column label="状态" prop="status" align="center">
         <template #default="{ row }">
-          <el-tag type="primary" v-if="row.status == '匹配中'">{{
-            row.status
-          }}</el-tag>
-          <el-tag type="success" v-else>{{ row.status }}</el-tag>
+          <el-tag type="primary" v-if="row.status == '0'">匹配中</el-tag>
+          <el-tag type="success" v-else>已完成</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -198,8 +237,8 @@ onMounted(() => {
         </template>
       </el-table-column>
 
-      <template #emit>
-        <el-empty description="description" />
+      <template #empty>
+        <el-empty description="暂无数据" />
       </template>
     </el-table>
 
@@ -211,8 +250,7 @@ onMounted(() => {
         :disabled="disabled"
         :background="background"
         layout="prev, pager, next, jumper"
-        :total="100"
-        @size-change="handleSizeChange"
+        :total="total"
         @current-change="handleCurrentChange"
       />
     </div>
