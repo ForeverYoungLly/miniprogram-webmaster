@@ -4,8 +4,8 @@ import { DeleteFilled } from '@element-plus/icons-vue'
 import { showPost } from '../../api/api'
 const selectedType = ref('')
 const selectedStatus = ref('0')
-let drawer = ref(true) //控制大抽屉
-let innerDrawer = ref(true) //控制小抽屉
+let drawer = ref(true)
+let innerDrawer = ref(true)
 const TypeList = ref([
   {
     label: '篮球',

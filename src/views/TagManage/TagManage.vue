@@ -1,18 +1,12 @@
 <script setup>
-// 测无感刷新
-import { showPost } from '@/api/api.js'
+import { getSwipers } from '@/api/api.js'
+import { onMounted } from 'vue'
 
-const data = {
-  pageNum: 1,
-  pageSize: 1
-}
-const requestPost = async () => {
-  let res = await showPost(JSON.stringify(data))
-  console.log(res)
-}
+onMounted(() => {
+  const list = getSwipers()
+  console.log(list)
+})
 </script>
 <template>
-  <page-contain title="标签管理">
-    <button @click="requestPost">resetPasserword</button>
-  </page-contain>
+  <page-contain title="标签管理"> </page-contain>
 </template>
