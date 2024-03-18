@@ -23,10 +23,6 @@ const router = createRouter({
           component: () => import('@/views/PostManage/PostManage.vue')
         },
         {
-          path: '/CommentsPart',
-          component: () => import('@/views/CommentsPart/CommentsPart.vue')
-        },
-        {
           path: '/ResourceManage',
           component: () => import('@/views/ResourceManage/ResourceManage.vue')
         },
