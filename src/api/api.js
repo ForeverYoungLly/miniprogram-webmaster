@@ -1,17 +1,23 @@
 import request from '@/utils/request'
-import { useTokenStore } from '@/stores'
 
-const tokenStore = useTokenStore()
-const value = tokenStore.accessToken
+// import { useTokenStore } from '@/stores'
+
+// const tokenStore = useTokenStore()
+// const value = tokenStore.accessToken
 
 // 登录接口
 export const userLoginService = (data) =>
   request.post('/auth/manage/passwordLogin', data)
+
 // 退出登录接口
 export const userLogoffService = () => request.post('/auth/manage/logout')
 
 // 罗列帖子
-export const showPost = (data) => request.post('/post/manage/list', data)
+export const showPost = (data) => {
+  return request.post('/post/manage/list', {
+    data: data
+  })
+}
 
 // 删除帖子
 export const deletePost = (data) =>

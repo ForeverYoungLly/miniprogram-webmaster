@@ -55,10 +55,6 @@ const handleCommand = async (key) => {
           <el-icon><Files /></el-icon>
           <span>帖子管理</span>
         </el-menu-item>
-        <el-menu-item index="/CommentsPart">
-          <el-icon><EditPen /></el-icon>
-          <span>评论管理</span>
-        </el-menu-item>
         <el-menu-item index="/ResourceManage">
           <el-icon><Notebook /></el-icon>
           <span>展示管理</span>
