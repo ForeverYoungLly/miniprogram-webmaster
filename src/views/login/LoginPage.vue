@@ -1,7 +1,7 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import { useTokenStore } from '@/stores'
+import { useTokenStore, useUserStore } from '@/stores'
 import { userLoginService } from '@/api/api.js'
 import { useRouter } from 'vue-router'
 
@@ -19,6 +19,8 @@ const login = async () => {
   }
   let res = await userLoginService(JSON.stringify(data))
   const tokenStore = useTokenStore()
+  const userStore = useUserStore()
+  userStore.setUid(LoginData.value.uid)
   tokenStore.setAccessToken(res.data.access_token)
   tokenStore.setRefreshToken(res.data.refresh_token)
   router.push('/Manage')

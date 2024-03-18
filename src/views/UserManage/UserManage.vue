@@ -192,7 +192,7 @@ const refresh = () => {
 <template>
   <page-contain title="用户管理">
     <el-form inline>
-      <el-form-item label="权限:">
+      <el-form-item label="权限">
         <el-select v-model="premissions">
           <el-option label="管理员" value="1"></el-option>
           <el-option label="普通用户" value="0"></el-option>
@@ -208,7 +208,7 @@ const refresh = () => {
         <el-input
           v-model="input"
           style="width: 240px"
-          placeholder="Please input"
+          placeholder="请输入搜索关键词"
         />
       </el-form-item>
       <el-form-item>
@@ -221,9 +221,9 @@ const refresh = () => {
         label="ID"
         prop="uid"
         align="center"
-        width="80"
+        width="100"
       ></el-table-column>
-      <el-table-column label="头像" align="center" width="80">
+      <el-table-column label="头像" align="center" width="100">
         <template #default="{ row }">
           <el-avatar :src="row.avatar" />
         </template>
@@ -232,34 +232,35 @@ const refresh = () => {
         label="昵称"
         prop="userName"
         align="center"
-        width="130"
+        width="150"
       ></el-table-column>
       <el-table-column
         label="手机号"
         prop="phonenumber"
         align="center"
-        width="200"
+        width="220"
       ></el-table-column>
       <el-table-column
         label="性别"
         prop="sex"
         align="center"
-        width="80"
+        width="100"
       ></el-table-column>
-      <el-table-column label="状态" prop="status" align="center" width="130">
+      <el-table-column label="状态" prop="status" align="center" width="150">
         <template #default="{ row }">
           <el-tag type="success" v-if="row.status == 0">账号正常</el-tag>
           <el-tag type="danger" v-else>账号已封禁</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="权限" prop="status" align="center" width="230">
+      <el-table-column label="权限" prop="status" align="center" width="250">
         <template #default="{ row }">
           <el-tag type="primary" v-if="row.type == 1">管理员</el-tag>
           <el-tag type="success" v-else>普通用户</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230">
+      <el-table-column label="操作" align="center" width="250">
         <template #default="{ row }">
+<<<<<<< HEAD
           <el-button
             type="info"
             round
@@ -280,12 +281,21 @@ const refresh = () => {
           <el-button type="warning" round v-else @click="CancelBan(row.uid)"
             >解禁</el-button
           >
+=======
+          <el-button type="info" round v-if="row.type == 1"
+            >取消管理员</el-button
+          >
+          <el-button type="primary" round v-else>设为管理员</el-button>
+          <el-button type="danger" round v-if="row.status == 0">封禁</el-button>
+          <el-button type="warning" round v-else>解禁</el-button>
+>>>>>>> 0a9ab5374abfd34a1b02622e8a62f3cb15adaa66
         </template>
       </el-table-column>
       <template #empty>
         <el-empty description="暂无数据" />
       </template>
     </el-table>
+<<<<<<< HEAD
     <!-- f分页 -->
     <div class="fenye">
       <el-pagination
@@ -304,3 +314,8 @@ const refresh = () => {
   margin-top: 5vh;
 }
 </style>
+=======
+  </page-contain>
+</template>
+<style scoped></style>
+>>>>>>> 0a9ab5374abfd34a1b02622e8a62f3cb15adaa66

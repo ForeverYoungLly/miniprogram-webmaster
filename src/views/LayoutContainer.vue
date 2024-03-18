@@ -9,10 +9,11 @@ import {
   CaretBottom,
   Histogram
 } from '@element-plus/icons-vue'
-import { useTokenStore } from '@/stores'
+import { useTokenStore, useUserStore } from '@/stores'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 const tokenStore = useTokenStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 onMounted(() => {})
@@ -29,10 +30,11 @@ const handleCommand = async (key) => {
     // 清除本地的数据 (token + user信息)
     tokenStore.removeAccessToken()
     tokenStore.removeRefreshToken()
+    userStore.removeUid()
     router.push('/login')
   } else {
     // 跳转操作
-    router.push(`/${key}/${key}`)
+    router.push('/MySelf')
   }
 }
 </script>
