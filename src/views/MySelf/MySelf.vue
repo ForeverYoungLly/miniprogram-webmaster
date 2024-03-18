@@ -7,15 +7,11 @@ const userStore = useUserStore()
 const form = reactive({
   name: '',
   userID: userStore.uerUid,
-  sex: '1',
-  delivery: false,
-  type: []
+  sex: '',
+  phone: '',
+  status: '',
+  type: ''
 })
-
-// 修改个人资料
-const onSubmit = () => {
-  console.log('1111')
-}
 </script>
 <template>
   <page-contain title="个人中心">
@@ -44,38 +40,16 @@ const onSubmit = () => {
           </el-form-item>
           <!-- 性别 -->
           <el-form-item label="性别">
-            <el-radio-group v-model="form.sex" class="ml-4">
-              <el-radio value="0" size="large">男</el-radio>
-              <el-radio value="1" size="large">女</el-radio>
-            </el-radio-group>
+            <el-input v-model="form.sex" />
           </el-form-item>
-          <el-form-item label="Instant delivery">
-            <el-switch v-model="form.delivery" />
+          <el-form-item label="手机号">
+            <el-input v-model="form.phone" />
           </el-form-item>
-          <el-form-item label="Activity type">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox value="Online activities" name="type">
-                Online activities
-              </el-checkbox>
-              <el-checkbox value="Promotion activities" name="type">
-                Promotion activities
-              </el-checkbox>
-              <el-checkbox value="Offline activities" name="type">
-                Offline activities
-              </el-checkbox>
-              <el-checkbox value="Simple brand exposure" name="type">
-                Simple brand exposure
-              </el-checkbox>
-            </el-checkbox-group>
+          <el-form-item label="封禁状态">
+            <el-input v-model="form.status" />
           </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              size="large"
-              @click="onSubmit"
-              style="margin: auto"
-              >提交</el-button
-            >
+          <el-form-item label="用户类型">
+            <el-input v-model="form.type" />
           </el-form-item>
         </el-form>
       </el-card>

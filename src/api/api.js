@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 import { useTokenStore } from '@/stores'
 import { ref } from 'vue'
+import axios from 'axios'
 
 const tokenStore = useTokenStore()
 
@@ -159,9 +160,4 @@ export const deleteSwiper = (data) =>
 
 // 上传图片
 export const getImgUrl = (data) =>
-  request.post('/upload', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
-    }
-  })
+  axios.post('http://8.146.208.139:10010/upload', data)

@@ -158,10 +158,6 @@ const CancelBan = (uid) => {
       ElMessage.error('禁用失败')
     })
 }
-//分页换页
-const handleCurrentChange = (num) => {
-  console.log(num)
-}
 //搜索
 const Search = () => {
   let data = ref({})
@@ -260,62 +256,18 @@ const refresh = () => {
       </el-table-column>
       <el-table-column label="操作" align="center" width="250">
         <template #default="{ row }">
-<<<<<<< HEAD
-          <el-button
-            type="info"
-            round
-            v-if="row.type == 1"
-            @click="CancelManger(row.uid)"
-            >取消管理员</el-button
-          >
-          <el-button type="primary" round v-else @click="SetManager(row.uid)"
-            >设为管理员</el-button
-          >
-          <el-button
-            type="danger"
-            round
-            v-if="row.status == 0"
-            @click="BanUser(row.uid)"
-            >封禁</el-button
-          >
-          <el-button type="warning" round v-else @click="CancelBan(row.uid)"
-            >解禁</el-button
-          >
-=======
           <el-button type="info" round v-if="row.type == 1"
             >取消管理员</el-button
           >
           <el-button type="primary" round v-else>设为管理员</el-button>
           <el-button type="danger" round v-if="row.status == 0">封禁</el-button>
           <el-button type="warning" round v-else>解禁</el-button>
->>>>>>> 0a9ab5374abfd34a1b02622e8a62f3cb15adaa66
         </template>
       </el-table-column>
       <template #empty>
         <el-empty description="暂无数据" />
       </template>
     </el-table>
-<<<<<<< HEAD
-    <!-- f分页 -->
-    <div class="fenye">
-      <el-pagination
-        v-model:current-page="currentPage3"
-        v-model:page-size="pageSize"
-        :background="background"
-        layout="prev, pager, next, jumper"
-        :total="totalNum"
-        @current-change="handleCurrentChange(currentPage3)"
-      />
-    </div>
-  </page-contain>
-</template>
-<style scoped>
-.fenye {
-  margin-top: 5vh;
-}
-</style>
-=======
   </page-contain>
 </template>
 <style scoped></style>
->>>>>>> 0a9ab5374abfd34a1b02622e8a62f3cb15adaa66

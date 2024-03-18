@@ -7,7 +7,7 @@ const selectedStatus = ref('')
 let loading = ref(false)
 let total = ref(0)
 let pageSize3 = 8
-let input=ref('')
+let input = ref('')
 let drawer = ref(false) //控制大抽屉
 let innerDrawer = ref(false) //控制小抽屉
 const TypeList = ref([
@@ -77,10 +77,10 @@ let form = ref({
   status: 0,
   tag: '篮球'
 })
-const refresh=()=>{
-  input.value=''
-  selectedStatus.value=''
-  selectedType.value=''
+const refresh = () => {
+  input.value = ''
+  selectedStatus.value = ''
+  selectedType.value = ''
 }
 const GetPost = (data) => {
   loading.value = true
@@ -97,19 +97,19 @@ const GetPost = (data) => {
       loading.value = false
       if (res.data.code != '200') {
         ElMessage.error('获取失败')
-      }else{
+      } else {
         total.value = res.data.data.total
-      PostList.value = []
-      res.data.data.rows.forEach((item) => {
-        PostList.value.push({
-          id: item.id,
-          avatar: item.posterAvatar,
-          nickname: item.posterUsername,
-          title: item.title,
-          type: item.tags[0].name,
-          status: item.status
+        PostList.value = []
+        res.data.data.rows.forEach((item) => {
+          PostList.value.push({
+            id: item.id,
+            avatar: item.posterAvatar,
+            nickname: item.posterUsername,
+            title: item.title,
+            type: item.tags[0].name,
+            status: item.status
+          })
         })
-      })
       }
     })
     .catch((err) => {
@@ -132,21 +132,21 @@ const Search = () => {
     data.value = {
       pageNum: 1,
       pageSize: 8,
-      q:input.value
+      q: input.value
     }
   } else if (selectedStatus.value != '' && selectedType.value == '') {
     data.value = {
       pageNum: 1,
       pageSize: 8,
       status: selectedStatus,
-      q:input.value
+      q: input.value
     }
   } else if (selectedStatus.value == '' && selectedType.value != '') {
     data.value = {
       pageNum: 1,
       pageSize: 8,
       tagid: selectedType,
-      q:input.value
+      q: input.value
     }
   } else {
     data.value = {
@@ -154,7 +154,7 @@ const Search = () => {
       pageSize: 8,
       status: selectedStatus,
       tagid: selectedType,
-      q:input.value
+      q: input.value
     }
   }
   GetPost(data.value)
