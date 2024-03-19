@@ -34,7 +34,7 @@ const refreshThetoken = () => {
 // 响应拦截器
 instance.interceptors.response.use(
   (res) => {
-    if (res.data.code == 200) {
+    if (res.data.code === 200) {
       // code值为200时视为成功
       return Promise.resolve(res.data)
     }
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
     if (res.data.code === 406 || res.data.code === 401) {
       router.push('/login')
     }
-    return Promise.reject(res)
+    return Promise.resolve(res)
   },
   (err) => {
     // 错误的默认情况 => 只要给提示

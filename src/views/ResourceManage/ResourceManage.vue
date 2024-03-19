@@ -47,16 +47,11 @@ const handlePictureCardPreview = (uploadFile) => {
 }
 
 const HandleHttprequest = (uploadFile, uploadFiles) => {
-  // const data1 = ref({
-  //   img: data
-  // })
-  // const res = getImgUrl(data1)
   console.log(uploadFile, uploadFiles)
 }
 
 const handleUpImage = (uploadFile, uploadFiles) => {
   console.log(uploadFile, uploadFiles)
-  // dataSet.addform.image = res.data.url
 }
 const a1 = (res) => {
   console.log(res)

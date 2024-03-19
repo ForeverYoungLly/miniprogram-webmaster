@@ -116,13 +116,7 @@ export const delAdmin = (data) =>
   })
 // 获取标签
 export const getTags = () => {
-  const data = ref('')
-  request.post('/tag/list', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
-    }
-  })
+  request.get('/tag/list')
 }
 
 // 新增标签
@@ -147,13 +141,7 @@ export const deleteTag = (data) =>
 
 // 获取轮播图列表
 export const getSwipers = () => {
-  const data = ref('')
-  request.post('/static/rotatingPic', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
-    }
-  })
+  request.get('/static/rotatingPic')
 }
 
 // 新增轮播图
