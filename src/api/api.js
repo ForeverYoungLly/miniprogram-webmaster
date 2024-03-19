@@ -16,7 +16,6 @@ export const userLoginService = (data) =>
 // 退出登录接口
 export const userLogoffService = () => request.post('/auth/manage/logout')
 
-<<<<<<< HEAD
 //首页数据展示
 export const showData = () => {
   return request.post('/tag/manage/count', '',{
@@ -27,8 +26,6 @@ export const showData = () => {
   })
 }
 
-=======
->>>>>>> b00c5fd5be45f41a3cf8463988f19ee45b7bab2d
 //展示帖子 详情
 export const showPostDetail = (id) => {
   return request.get(`/post/list/${id}`, {
