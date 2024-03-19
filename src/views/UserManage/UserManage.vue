@@ -1,12 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import {
-  postUser,
-  banUser,
-  releaseUser,
-  addAdmin,
-  delAdmin
-} from '../../api/api'
+import { postUser, banUser, releaseUser, addAdmin, delAdmin } from '@/api/api'
 let input = ref('')
 let premissions = ref('')
 let searchType = ref('')
@@ -23,6 +17,11 @@ const getUser = (data) => {
       if (res.code != 200) {
         ElMessage.error('获取失败')
       } else {
+        let list = res.data.rows
+        list.forEach(function (element) {
+          if (element.sex === 0) element.sex = '男'
+          else element.sex = '女'
+        })
         UserList.value = res.data.rows
         totalNum.value = res.data.total
       }
@@ -103,12 +102,12 @@ const BanUser = (uid) => {
   }
   banUser(data)
     .then((res) => {
-      loading.value = false
-      console.log(res)
       ElMessage({
-        message: '禁用成功',
+        message: '修改成功',
         type: 'success'
       })
+      loading.value = false
+      console.log(res)
       let data = {
         pageNum: pageNum.value,
         pageSize: pageSize
@@ -130,12 +129,12 @@ const CancelBan = (uid) => {
   }
   releaseUser(data)
     .then((res) => {
-      loading.value = false
-      console.log(res)
       ElMessage({
-        message: '禁用成功',
+        message: '修改成功',
         type: 'success'
       })
+      loading.value = false
+      console.log(res)
       let data = {
         pageNum: pageNum.value,
         pageSize: pageSize

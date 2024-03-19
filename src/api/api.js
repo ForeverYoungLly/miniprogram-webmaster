@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 import { useTokenStore } from '@/stores'
 import { ref } from 'vue'
+import axios from 'axios'
 
 const tokenStore = useTokenStore()
 
@@ -15,6 +16,7 @@ export const userLoginService = (data) =>
 // 退出登录接口
 export const userLogoffService = () => request.post('/auth/manage/logout')
 
+<<<<<<< HEAD
 //首页数据展示
 export const showData = () => {
   return request.post('/tag/manage/count', '',{
@@ -25,6 +27,8 @@ export const showData = () => {
   })
 }
 
+=======
+>>>>>>> b00c5fd5be45f41a3cf8463988f19ee45b7bab2d
 //展示帖子 详情
 export const showPostDetail = (id) => {
   return request.get(`/post/list/${id}`, {
@@ -138,13 +142,7 @@ export const delAdmin = (data) =>
   })
 // 获取标签
 export const getTags = () => {
-  const data = ref('')
-  request.post('/tag/list', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
-    }
-  })
+  request.get('/tag/list')
 }
 
 // 新增标签
@@ -169,13 +167,7 @@ export const deleteTag = (data) =>
 
 // 获取轮播图列表
 export const getSwipers = () => {
-  const data = ref('')
-  request.post('/static/rotatingPic', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
-    }
-  })
+  request.get('/static/rotatingPic')
 }
 
 // 新增轮播图
@@ -198,9 +190,4 @@ export const deleteSwiper = (data) =>
 
 // 上传图片
 export const getImgUrl = (data) =>
-  request.post('/upload', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
-    }
-  })
+  axios.post('http://8.146.208.139:10010/upload', data)

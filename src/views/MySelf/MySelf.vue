@@ -1,21 +1,48 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores'
+import { postUser, resetPasserword } from '@/api/api'
 const userStore = useUserStore()
 
 // do not use same name with ref
-const form = reactive({
-  name: '',
-  userID: userStore.uerUid,
-  sex: '1',
-  delivery: false,
-  type: []
+const form = ref({
+  userName: '',
+  uid: userStore.uerUid,
+  sex: '',
+  phoneNumber: '',
+  status: '',
+  type: '',
+  password: ''
 })
 
-// 修改个人资料
-const onSubmit = () => {
-  console.log('1111')
+const repassword = ref('')
+const reset = () => {
+  const data = {
+    uid: userStore.uerUid
+  }
+  resetPasserword(JSON.stringify(data)).then((res) => {
+    console.log(res)
+    repassword.value = res.data.resetPassword
+  })
 }
+
+onMounted(() => {
+  const data = {
+    pageNum: 1,
+    pageSize: 1,
+    uid: userStore.uerUid
+  }
+  postUser(JSON.stringify(data)).then((res) => {
+    console.log(res.data.rows[0])
+    if (res.data.rows[0].sex === 0) res.data.rows[0].sex = '男'
+    else res.data.rows[0].sex = '女'
+    if (res.data.rows[0].status === 0) res.data.rows[0].status = '账号正常'
+    else res.data.rows[0].status = '账号已封禁'
+    if (res.data.rows[0].type === 0) res.data.rows[0].type = '普通用户'
+    else res.data.rows[0].type = '管理员'
+    form.value = res.data.rows[0]
+  })
+})
 </script>
 <template>
   <page-contain title="个人中心">
@@ -36,46 +63,24 @@ const onSubmit = () => {
         <el-form :model="form" label-width="auto" style="max-width: 500px">
           <!-- 用户名 -->
           <el-form-item label="用户名">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.userName" />
           </el-form-item>
           <!-- 用户ID -->
           <el-form-item label="用户ID">
-            <el-input v-model="form.userID" style="width: 240px" disabled />
+            <el-input v-model="form.uid" style="width: 240px" disabled />
           </el-form-item>
           <!-- 性别 -->
           <el-form-item label="性别">
-            <el-radio-group v-model="form.sex" class="ml-4">
-              <el-radio value="0" size="large">男</el-radio>
-              <el-radio value="1" size="large">女</el-radio>
-            </el-radio-group>
+            <el-input v-model="form.sex" />
           </el-form-item>
-          <el-form-item label="Instant delivery">
-            <el-switch v-model="form.delivery" />
+          <el-form-item label="手机号">
+            <el-input v-model="form.phoneNumber" />
           </el-form-item>
-          <el-form-item label="Activity type">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox value="Online activities" name="type">
-                Online activities
-              </el-checkbox>
-              <el-checkbox value="Promotion activities" name="type">
-                Promotion activities
-              </el-checkbox>
-              <el-checkbox value="Offline activities" name="type">
-                Offline activities
-              </el-checkbox>
-              <el-checkbox value="Simple brand exposure" name="type">
-                Simple brand exposure
-              </el-checkbox>
-            </el-checkbox-group>
+          <el-form-item label="封禁状态">
+            <el-input v-model="form.status" />
           </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              size="large"
-              @click="onSubmit"
-              style="margin: auto"
-              >提交</el-button
-            >
+          <el-form-item label="用户类型">
+            <el-input v-model="form.type" />
           </el-form-item>
         </el-form>
       </el-card>
@@ -85,7 +90,15 @@ const onSubmit = () => {
             <span>重置密码</span>
           </div>
         </template>
-        <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
+        <el-form-item label="用户ID">
+          <el-input v-model="form.uid" />
+        </el-form-item>
+        <el-form-item label="重置密码">
+          <el-button type="primary" @click="reset">点击重置</el-button>
+        </el-form-item>
+        <el-form-item label="重置后密码">
+          <el-input v-model="repassword" />
+        </el-form-item>
       </el-card>
     </div>
   </page-contain>

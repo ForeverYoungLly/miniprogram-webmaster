@@ -222,6 +222,7 @@ const Search = () => {
   console.log(data.value)
   GetPost(data.value)
 }
+<<<<<<< HEAD
 const showComment = () => {
   loading.value = true
   let data = {
@@ -258,6 +259,13 @@ const splitImg = (StringCon) => {
   let content = StringCon.split('**/img/**')
   let con = content[0] ? content[0].split('**/rank/**')[0] : ''
   let imgList = content[1] ? content[1].split(',') : ''
+=======
+const splitImg = (StringCon) => {
+  //切割图像数组
+  let content = StringCon.split('**/img/**')
+  let con = content[0].split('**/rank/**')[0]
+  let imgList = content[1].split(',')
+>>>>>>> b00c5fd5be45f41a3cf8463988f19ee45b7bab2d
   let re = {
     imgList: imgList,
     content: con

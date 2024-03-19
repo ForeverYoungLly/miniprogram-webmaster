@@ -1,11 +1,14 @@
 <template>
   <page-contain title="展示管理">
     <el-upload
-      action="http://8.146.208.139:10010"
+      action="http://8.146.208.139:3000/upload"
+      method="post"
       v-model:file-list="fileList"
       list-type="picture-card"
+      :before-upload="a1"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
+      :on-success="handleUpImage"
       :http-request="HandleHttprequest"
     >
       <el-icon><Plus /></el-icon>
@@ -43,7 +46,14 @@ const handlePictureCardPreview = (uploadFile) => {
   dialogVisible.value = true
 }
 
-const HandleHttprequest = (data) => {
-  console.log(data.file)
+const HandleHttprequest = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const handleUpImage = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+const a1 = (res) => {
+  console.log(res)
 }
 </script>

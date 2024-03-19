@@ -73,10 +73,17 @@ onMounted(() => {
   <page-contain title="用户数据">
     <el-row>
       <el-col :span="12">
+<<<<<<< HEAD
         <el-statistic title="用户数量" :value="UserNum" />
       </el-col>
       <el-col :span="12">
         <el-statistic title="帖子数量" :value="PostNum" />
+=======
+        <el-statistic title="用户数量" :value="source" />
+      </el-col>
+      <el-col :span="12">
+        <el-statistic title="帖子数量" :value="source" />
+>>>>>>> b00c5fd5be45f41a3cf8463988f19ee45b7bab2d
       </el-col>
     </el-row>
     <div id="main" style="width: 100%; height: 50vh"></div>
