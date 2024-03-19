@@ -1,14 +1,22 @@
 <script setup>
-import axios from 'axios'
 import { onMounted, ref } from 'vue'
-import { showPostDetail } from '../../api/api'
-import { DeleteFilled } from '@element-plus/icons-vue'
+import {
+  showPostDetail,
+  showPost,
+  postComment,
+  deletePost
+} from '../../api/api'
 import { ElMessage } from 'element-plus'
+import { ArrowDownBold } from '@element-plus/icons-vue'
 const selectedType = ref('')
 const selectedStatus = ref('')
+let CommentTotal = ref(0)
+let CommentPageNum = ref(1)
 let loading = ref(false)
 let total = ref(0)
-let pageSize3 = 8
+let pageSize3 = 7
+let nowPostId = ref('')
+let commentList = ref([])
 let input = ref('')
 let form = ref({
   title: '',
@@ -26,60 +34,75 @@ let innerDrawer = ref(false) //控制小抽屉
 const TypeList = ref([
   {
     label: '篮球',
-    value: 0
-  },
-  {
-    label: '足球',
     value: 1
   },
   {
-    label: '排球',
+    label: '足球',
     value: 2
   },
   {
-    label: '羽毛球',
+    label: '排球',
     value: 3
   },
   {
-    label: '游泳',
+    label: '羽毛球',
     value: 4
   },
   {
-    label: '健身',
+    label: '游泳',
     value: 5
   },
   {
-    label: '拼车',
+    label: '健身',
     value: 6
   },
   {
-    label: '演唱会',
+    label: '拼车',
     value: 7
   },
   {
-    label: '拼车',
+    label: '演唱会',
     value: 8
   },
   {
-    label: '旅行',
+    label: '拼单',
     value: 9
   },
   {
-    label: '学习',
+    label: '旅行',
     value: 10
   },
   {
-    label: '其他',
+    label: '学习',
     value: 11
+  },
+  {
+    label: '其他',
+    value: 12
   }
 ])
 let PostList = ref([])
 const ShowDetail = (id) => {
   loading.value = true
+  CommentTotal.value = 0
+  nowPostId.value = id
+  form.value = {}
+  commentList.value = []
   showPostDetail(id)
     .then((res) => {
       console.log(res)
       console.log(splitImg(res.data.content))
+      form.value = {
+        title: res.data.title,
+        nickname: res.data.posterUsername,
+        meetAddress: res.data.meetAddress,
+        status: res.data.status,
+        tag: res.data.tags[0].name,
+        urls: splitImg(res.data.content).imgList,
+        beginTime: formatDateTime(res.data.beginTime),
+        endTime: formatDateTime(res.data.endTime),
+        content: splitImg(res.data.content).content
+      }
       loading.value = false
       drawer.value = true
     })
@@ -96,23 +119,15 @@ const refresh = () => {
 }
 const GetPost = (data) => {
   loading.value = true
-  axios({
-    method: 'POST',
-    data: data,
-    url: 'http://8.146.208.139:10010/post/manage/list',
-    headers: {
-      'Content-Type': 'application/json',
-      access_token: JSON.parse(localStorage.getItem('token')).accessToken
-    }
-  })
+  showPost(data)
     .then((res) => {
       loading.value = false
-      if (res.data.code != '200') {
+      if (res.code != '200') {
         ElMessage.error('获取失败')
       } else {
-        total.value = res.data.data.total
+        total.value = res.data.total
         PostList.value = []
-        res.data.data.rows.forEach((item) => {
+        res.data.rows.forEach((item) => {
           PostList.value.push({
             id: item.id,
             avatar: item.posterAvatar,
@@ -131,9 +146,10 @@ const GetPost = (data) => {
     })
 }
 onMounted(() => {
+  CommentPageNum.value=1
   let data = {
     pageNum: 1,
-    pageSize: 8,
+    pageSize: 7,
     status: 0
   }
   GetPost(data)
@@ -144,27 +160,27 @@ const handleCurrentChange = (num) => {
   if (selectedStatus.value == '' && selectedType.value == '') {
     data.value = {
       pageNum: num,
-      pageSize: 8,
+      pageSize: 7,
       q: input.value
     }
   } else if (selectedStatus.value != '' && selectedType.value == '') {
     data.value = {
       pageNum: num,
-      pageSize: 8,
+      pageSize: 7,
       status: selectedStatus,
       q: input.value
     }
   } else if (selectedStatus.value == '' && selectedType.value != '') {
     data.value = {
       pageNum: num,
-      pageSize: 8,
+      pageSize: 7,
       tagid: selectedType,
       q: input.value
     }
   } else {
     data.value = {
       pageNum: num,
-      pageSize: 8,
+      pageSize: 7,
       status: selectedStatus,
       tagid: selectedType,
       q: input.value
@@ -177,43 +193,149 @@ const Search = () => {
   if (selectedStatus.value == '' && selectedType.value == '') {
     data.value = {
       pageNum: 1,
-      pageSize: 8,
+      pageSize: 7,
       q: input.value
     }
   } else if (selectedStatus.value != '' && selectedType.value == '') {
     data.value = {
       pageNum: 1,
-      pageSize: 8,
-      status: selectedStatus,
+      pageSize: 7,
+      status: selectedStatus.value,
       q: input.value
     }
   } else if (selectedStatus.value == '' && selectedType.value != '') {
     data.value = {
       pageNum: 1,
-      pageSize: 8,
-      tagid: selectedType,
+      pageSize: 7,
+      tagId: selectedType.value,
       q: input.value
     }
   } else {
     data.value = {
       pageNum: 1,
-      pageSize: 8,
-      status: selectedStatus,
-      tagid: selectedType,
+      pageSize: 7,
+      status: selectedStatus.value,
+      tagId: selectedType.value,
       q: input.value
     }
   }
+  console.log(data.value)
   GetPost(data.value)
 }
-const splitImg=(StringCon)=>{//切割图像数组
-  let content=StringCon.split('**/img/**')
-  let con=content[0].split('**/rank/**')[0]
-  let imgList=content[1].split(',')
-  let re={
-    imgList:imgList,
-    content:con
+const showComment = () => {
+  loading.value = true
+  let data = {
+    postId: nowPostId.value,
+    pageNum: CommentPageNum.value,
+    pageSize: 7
+  }
+  console.log(data)
+  postComment(data)
+    .then((res) => {
+      CommentPageNum.value++
+      innerDrawer.value = true
+      loading.value = false
+      console.log(res)
+      CommentTotal.value = res.data.total
+      res.data.rows.forEach((item) => {
+        commentList.value.push({
+          nickname: item.username,
+          id: item.id,
+          avatar: item.avatar,
+          content:item.content,
+          time: item.createTime.substring(0, 10)
+        })
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+      loading.value = false
+      ElMessage.error('获取失败')
+    })
+}
+const splitImg = (StringCon) => {
+  //切割图像数组
+  let content = StringCon.split('**/img/**')
+  let con = content[0] ? content[0].split('**/rank/**')[0] : ''
+  let imgList = content[1] ? content[1].split(',') : ''
+  let re = {
+    imgList: imgList,
+    content: con
   }
   return re
+}
+const showFristComment=()=>{
+  CommentPageNum.value=1
+  commentList.value=[]
+  loading.value = true
+  let data = {
+    postId: nowPostId.value,
+    pageNum: 1,
+    pageSize: 7
+  }
+  console.log(data)
+  postComment(data)
+    .then((res) => {
+      CommentPageNum.value++
+      innerDrawer.value = true
+      loading.value = false
+      console.log(res)
+      CommentTotal.value = res.data.total
+      res.data.rows.forEach((item) => {
+        commentList.value.push({
+          nickname: item.username,
+          id: item.id,
+          avatar: item.avatar,
+          content:item.content,
+          time: item.createTime.substring(0, 10)
+        })
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+      loading.value = false
+      ElMessage.error('获取失败')
+    })
+    console.log(CommentPageNum.value)
+}
+//转化时间格式
+const formatDateTime = (isoDateTimeString) => {
+  const date = new Date(isoDateTimeString)
+
+  const year = date.getFullYear() // 获取年份
+  const month = ('0' + (date.getMonth() + 1)).slice(-2) // 获取月份，并确保两位数字
+  const day = ('0' + date.getDate()).slice(-2) // 获取日期，并确保两位数字
+  const hours = ('0' + date.getHours()).slice(-2) // 获取小时，并确保两位数字
+  const minutes = ('0' + date.getMinutes()).slice(-2) // 获取分钟，并确保两位数字
+  const seconds = ('0' + date.getSeconds()).slice(-2) // 获取秒钟，并确保两位数字
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+const Del = (id) => {
+  ElMessageBox.confirm('是否确定删除?', 'Warning', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: '提醒'
+  }).then(() => {
+    let data = {
+      id: id
+    }
+    deletePost(data)
+      .then((res) => {
+        if (res.code != 200) {
+          ElMessage.error('删除失败')
+        } else {
+          ElMessage({
+            type: 'success',
+            message: '删除成功'
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        ElMessage.error('删除失败')
+      })
+  })
 }
 </script>
 
@@ -258,7 +380,7 @@ const splitImg=(StringCon)=>{//切割图像数组
         align="center"
         width="50"
       ></el-table-column>
-      <el-table-column label="头像" align="center" width="80">
+      <el-table-column label="头像" align="center" width="60">
         <template #default="{ row }">
           <el-avatar :src="row.avatar" />
         </template>
@@ -275,7 +397,7 @@ const splitImg=(StringCon)=>{//切割图像数组
         align="center"
         width="350"
       ></el-table-column>
-      <el-table-column label="类型" prop="type" align="center" width="200">
+      <el-table-column label="类型" prop="type" align="center" width="150">
         <template #default="{ row }">
           <el-tag type="primary">{{ row.type }}</el-tag>
         </template>
@@ -291,7 +413,7 @@ const splitImg=(StringCon)=>{//切割图像数组
           <el-button type="primary" round @click="ShowDetail(row.id)"
             >查看</el-button
           >
-          <el-button type="danger" round @click="Show(row.id)">删除</el-button>
+          <el-button type="danger" round @click="Del(row.id)">删除</el-button>
         </template>
       </el-table-column>
 
@@ -317,8 +439,8 @@ const splitImg=(StringCon)=>{//切割图像数组
     <el-drawer v-model="drawer" title="帖子详情" size="50%">
       <div>
         <div class="btns">
-          <el-button type="primary">查看评论</el-button>
-          <el-button type="danger">删除</el-button>
+          <el-button type="primary" @click="showFristComment">查看评论</el-button>
+          <el-button type="danger" @click="del">删除</el-button>
         </div>
         <el-form :model="form" label-width="auto">
           <el-form-item label="标题:">
@@ -344,11 +466,11 @@ const splitImg=(StringCon)=>{//切割图像数组
             <el-text class="mx-1" size="large">{{ form.endTime }}</el-text>
           </el-form-item>
           <el-form-item label="详情:">
-            <el-input v-model="form.content" type="textarea" />
+            <el-input v-model="form.content" type="textarea" disabled />
           </el-form-item>
           <el-form-item label="图片:">
-            <div class="demo-image__lazy">
-              <el-image v-for="url in urls" :key="url" :src="url" />
+            <div class="demo-image__lazy" lazy>
+              <el-image v-for="url in form.urls" :key="url" :src="url" />
             </div>
           </el-form-item>
         </el-form>
@@ -360,35 +482,23 @@ const splitImg=(StringCon)=>{//切割图像数组
           :append-to-body="true"
           :before-close="handleClose"
         >
-          <div>
-            <el-card style="max-width: 500px">
-              <div style="display: flex; align-items: center">
-                <el-avatar
-                  :size="30"
-                  src="http://8.146.208.139:3000/avator/1709974133978.jpg"
-                />
-                <el-text class="mx-1 name" size="large">Info:</el-text>
-                <el-text class="mx-1 content" size="large"
-                  >一起去玩呀<el-icon style="margin-left: 5px"
-                    ><DeleteFilled /></el-icon
-                ></el-text>
-              </div>
-              <div v-for="o in 2" :key="o" class="text item">
-                <div class="son_comment">
-                  <el-text size="small">xxx</el-text>
-                  <el-text type="primary" size="small"
-                    >&nbsp;回复&nbsp;</el-text
-                  >
-                  <el-text size="small">xxx:</el-text>
-                  <el-text type="Info" size="small" class="content"
-                    >&nbsp;&nbsp;&nbsp;&nbsp;我觉得可以啊，一起走吧！<el-icon
-                      style="margin-left: 5px"
-                      ><DeleteFilled /></el-icon
-                  ></el-text>
-                </div>
-              </div>
-            </el-card>
+          <div v-for="(item, index) in commentList" :key="index">
+            <CommentCard
+              :nickname="item.nickname"
+              :id="item.id"
+              :avatar="item.avatar"
+              :content="item.content"
+              :time="item.time"
+            ></CommentCard>
           </div>
+          <div v-if="CommentTotal > commentList.length" @click="showComment">
+            <el-text type="info"
+              >查看更多<el-icon><ArrowDownBold /></el-icon
+            ></el-text>
+          </div>
+          <template v-if="commentList.length <= 0">
+            <el-empty description="暂无评论" />
+          </template>
         </el-drawer>
       </div>
     </el-drawer>

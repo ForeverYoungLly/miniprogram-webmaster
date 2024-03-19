@@ -245,7 +245,7 @@ const refresh = () => {
         label="手机号"
         prop="phoneNumber"
         align="center"
-        width="220"
+        width="170"
       ></el-table-column>
       <el-table-column
         label="性别"
@@ -259,7 +259,7 @@ const refresh = () => {
           <el-tag type="danger" v-else>账号已封禁</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="权限" prop="status" align="center" width="250">
+      <el-table-column label="权限" prop="status" align="center" width="100">
         <template #default="{ row }">
           <el-tag type="primary" v-if="row.type == 1">管理员</el-tag>
           <el-tag type="success" v-else>普通用户</el-tag>

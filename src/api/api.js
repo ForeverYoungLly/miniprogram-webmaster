@@ -15,9 +15,18 @@ export const userLoginService = (data) =>
 // 退出登录接口
 export const userLogoffService = () => request.post('/auth/manage/logout')
 
+//首页数据展示
+export const showData = () => {
+  return request.post('/tag/manage/count', '',{
+    headers: {
+      access_token: tokenStore.accessToken,
+      'Content-Type': 'application/json'
+    }
+  })
+}
 
 //展示帖子 详情
-export const showPostDetail=(id)=>{
+export const showPostDetail = (id) => {
   return request.get(`/post/list/${id}`, {
     headers: {
       access_token: tokenStore.accessToken,
@@ -37,7 +46,7 @@ export const showPost = (data) => {
 
 // 删除帖子
 export const deletePost = (data) =>
-  request.post('/post/manage/deletePost', data, {
+  request.post('/post/manage/delete', data, {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
@@ -46,7 +55,7 @@ export const deletePost = (data) =>
 
 // 删除评论
 export const deleteComment = (data) =>
-  request.post('/comment/manage/deleteComment', data, {
+  request.post('/comment/manage/delete', data, {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
@@ -55,13 +64,26 @@ export const deleteComment = (data) =>
 
 // 罗列对于帖子评论
 export const postComment = (data) =>
-  request.post('/comment/list', data, {
-    headers: {
-      access_token: tokenStore.accessToken,
-      'Content-Type': 'application/json'
+  request.post(
+    `/comment/list?pageNum=${data.pageNum}&pageSize=${data.pageSize}&postId=${data.postId}`,
+    {
+      headers: {
+        access_token: tokenStore.accessToken,
+        'Content-Type': 'application/json'
+      }
     }
-  })
-
+  )
+//罗列子评论
+export const SonComment = (data) =>
+  request.post(
+    `/comment/get?commentId=${data.commentId}&pageSize=${data.pageSize}&pageNum=${data.pageNum}`,
+    {
+      headers: {
+        access_token: tokenStore.accessToken,
+        'Content-Type': 'application/json'
+      }
+    }
+  )
 // 罗列目前用户
 export const postUser = (data) =>
   request.post('/user/manage/userList', data, {
