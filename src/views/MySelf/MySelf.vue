@@ -1,16 +1,47 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores'
+import { postUser, resetPasserword } from '@/api/api'
 const userStore = useUserStore()
 
 // do not use same name with ref
-const form = reactive({
-  name: '',
-  userID: userStore.uerUid,
+const form = ref({
+  userName: '',
+  uid: userStore.uerUid,
   sex: '',
-  phone: '',
+  phoneNumber: '',
   status: '',
-  type: ''
+  type: '',
+  password: ''
+})
+
+const repassword = ref('')
+const reset = () => {
+  const data = {
+    uid: userStore.uerUid
+  }
+  resetPasserword(JSON.stringify(data)).then((res) => {
+    console.log(res)
+    repassword.value = res.data.resetPassword
+  })
+}
+
+onMounted(() => {
+  const data = {
+    pageNum: 1,
+    pageSize: 1,
+    uid: userStore.uerUid
+  }
+  postUser(JSON.stringify(data)).then((res) => {
+    console.log(res.data.rows[0])
+    if (res.data.rows[0].sex === 0) res.data.rows[0].sex = '男'
+    else res.data.rows[0].sex = '女'
+    if (res.data.rows[0].status === 0) res.data.rows[0].status = '账号正常'
+    else res.data.rows[0].status = '账号已封禁'
+    if (res.data.rows[0].type === 0) res.data.rows[0].type = '普通用户'
+    else res.data.rows[0].type = '管理员'
+    form.value = res.data.rows[0]
+  })
 })
 </script>
 <template>
@@ -32,18 +63,18 @@ const form = reactive({
         <el-form :model="form" label-width="auto" style="max-width: 500px">
           <!-- 用户名 -->
           <el-form-item label="用户名">
-            <el-input v-model="form.name" />
+            <el-input v-model="form.userName" />
           </el-form-item>
           <!-- 用户ID -->
           <el-form-item label="用户ID">
-            <el-input v-model="form.userID" style="width: 240px" disabled />
+            <el-input v-model="form.uid" style="width: 240px" disabled />
           </el-form-item>
           <!-- 性别 -->
           <el-form-item label="性别">
             <el-input v-model="form.sex" />
           </el-form-item>
           <el-form-item label="手机号">
-            <el-input v-model="form.phone" />
+            <el-input v-model="form.phoneNumber" />
           </el-form-item>
           <el-form-item label="封禁状态">
             <el-input v-model="form.status" />
@@ -59,7 +90,15 @@ const form = reactive({
             <span>重置密码</span>
           </div>
         </template>
-        <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
+        <el-form-item label="用户ID">
+          <el-input v-model="form.uid" />
+        </el-form-item>
+        <el-form-item label="重置密码">
+          <el-button type="primary" @click="reset">点击重置</el-button>
+        </el-form-item>
+        <el-form-item label="重置后密码">
+          <el-input v-model="repassword" />
+        </el-form-item>
       </el-card>
     </div>
   </page-contain>
