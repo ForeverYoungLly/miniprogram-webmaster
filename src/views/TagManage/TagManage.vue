@@ -33,6 +33,7 @@ const getTaglist = async () => {
     .get('http://8.146.208.139:10010/tag/list')
     .then((response) => {
       response.data.data.forEach(function (element) {
+        console.log(element)
         dynamicTags.value.push(element.name)
       })
     })

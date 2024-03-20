@@ -50,8 +50,8 @@ const handleCommand = async (key) => {
         text-color="#fff"
         router
       >
-      <el-menu-item index="/AllData">
-        <el-icon><Histogram /></el-icon>
+        <el-menu-item index="/AllData">
+          <el-icon><Histogram /></el-icon>
           <span>用户数据</span>
         </el-menu-item>
         <el-menu-item index="/UserManage">
@@ -115,7 +115,7 @@ const handleCommand = async (key) => {
     background-color: #232323;
     &__logo {
       height: 120px;
-      background: url('@/assets/logo.png') no-repeat center / 120px auto;
+      background: url('@/assets/logo.jpg') no-repeat center / 120px auto;
     }
     .el-menu {
       border-right: none;
