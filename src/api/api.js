@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import { useTokenStore } from '@/stores'
-import { ref } from 'vue'
 import axios from 'axios'
 
 const tokenStore = useTokenStore()
@@ -18,7 +17,7 @@ export const userLogoffService = () => request.post('/auth/manage/logout')
 
 //首页数据展示
 export const showData = () => {
-  return request.post('/tag/manage/count', '',{
+  return request.post('/tag/manage/count', '', {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
@@ -138,20 +137,16 @@ export const delAdmin = (data) =>
     }
   })
 // 获取标签
-export const getTags = () => {
-  request.get('/tag/list')
-}
+export const getTags = () => request.get('/tag/list')
 
 // 新增标签
-export const addTag = () => {
-  const data = ref('')
+export const addTag = (data) => 
   request.post('/tag/manage/add', data, {
     headers: {
       access_token: tokenStore.accessToken,
       'Content-Type': 'application/json'
     }
   })
-}
 
 // 删除标签
 export const deleteTag = (data) =>
