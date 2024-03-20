@@ -163,9 +163,7 @@ export const deleteTag = (data) =>
   })
 
 // 获取轮播图列表
-export const getSwipers = () => {
-  request.get('/static/rotatingPic')
-}
+export const getSwipers = () => request.get('/static/rotatingPic')
 
 // 新增轮播图
 export const addSwiper = (data) =>
