@@ -17,7 +17,7 @@ const beforePicUpload = (uploadfile) => {
   }
   return isImg
 }
-const getTaglist = async () => {
+const getTaglist =() => {
   dynamicTags.value=[]
   axios
     .get('http://8.146.208.139:10010/tag/list')
@@ -200,8 +200,8 @@ onMounted(() => {
   </page-contain>
 </template>
 
-<!-- <style lang="scss" scoped>
+<style lang="scss" scoped>
 .el-tag {
   margin: 1%;
 }
-</style> -->
+</style>
