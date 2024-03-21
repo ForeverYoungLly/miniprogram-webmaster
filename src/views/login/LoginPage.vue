@@ -18,6 +18,14 @@ const login = async () => {
     password: LoginData.value.password
   }
   let res = await userLoginService(JSON.stringify(data))
+  console.log(res.data.msg)
+  if (res.data.msg == '用户名或密码错误')
+    ElMessage({
+      showClose: true,
+      message: '用户名或密码错误',
+      type: 'error',
+      center: true
+    })
   const tokenStore = useTokenStore()
   const userStore = useUserStore()
   userStore.setUid(LoginData.value.uid)
@@ -56,7 +64,6 @@ const login = async () => {
           <el-form-item class="flex">
             <div class="flex">
               <el-checkbox>记住我</el-checkbox>
-              <el-link type="primary" :underline="false">忘记密码？</el-link>
             </div>
           </el-form-item>
           <el-form-item>
@@ -77,8 +84,6 @@ const login = async () => {
 
 <style lang="scss" scoped>
 .bigBox {
-  width: 100%;
-  height: 100%;
   background: url('https://file.51pptmoban.com/d/file/2017/02/23/c05b203024cf5991cb35dab95b4f45d3.jpg');
 }
 .login-page {

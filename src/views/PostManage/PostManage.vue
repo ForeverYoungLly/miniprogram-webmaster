@@ -146,7 +146,7 @@ const GetPost = (data) => {
     })
 }
 onMounted(() => {
-  CommentPageNum.value=1
+  CommentPageNum.value = 1
   let data = {
     pageNum: 1,
     pageSize: 7,
@@ -242,7 +242,7 @@ const showComment = () => {
           nickname: item.username,
           id: item.id,
           avatar: item.avatar,
-          content:item.content,
+          content: item.content,
           time: item.createTime.substring(0, 10)
         })
       })
@@ -264,9 +264,9 @@ const splitImg = (StringCon) => {
   }
   return re
 }
-const showFristComment=()=>{
-  CommentPageNum.value=1
-  commentList.value=[]
+const showFristComment = () => {
+  CommentPageNum.value = 1
+  commentList.value = []
   loading.value = true
   let data = {
     postId: nowPostId.value,
@@ -286,7 +286,7 @@ const showFristComment=()=>{
           nickname: item.username,
           id: item.id,
           avatar: item.avatar,
-          content:item.content,
+          content: item.content,
           time: item.createTime.substring(0, 10)
         })
       })
@@ -296,7 +296,7 @@ const showFristComment=()=>{
       loading.value = false
       ElMessage.error('获取失败')
     })
-    console.log(CommentPageNum.value)
+  console.log(CommentPageNum.value)
 }
 //转化时间格式
 const formatDateTime = (isoDateTimeString) => {
@@ -439,7 +439,9 @@ const Del = (id) => {
     <el-drawer v-model="drawer" title="帖子详情" size="50%">
       <div>
         <div class="btns">
-          <el-button type="primary" @click="showFristComment">查看评论</el-button>
+          <el-button type="primary" @click="showFristComment"
+            >查看评论</el-button
+          >
           <el-button type="danger" @click="del">删除</el-button>
         </div>
         <el-form :model="form" label-width="auto">
