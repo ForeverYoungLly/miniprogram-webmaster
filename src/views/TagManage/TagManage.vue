@@ -17,8 +17,8 @@ const beforePicUpload = (uploadfile) => {
   }
   return isImg
 }
-const getTaglist =() => {
-  dynamicTags.value=[]
+const getTaglist = () => {
+  dynamicTags.value = []
   axios
     .get('http://8.146.208.139:10010/tag/list')
     .then((response) => {
@@ -66,7 +66,7 @@ const input = ref('')
 
 const Cancel = () => {
   input.value = ''
-  fileList.value=[]
+  fileList.value = []
   dialogVisible.value = false
 }
 const upload = () => {
@@ -96,7 +96,7 @@ const upload = () => {
               message: '添加成功',
               type: 'success'
             })
-            fileList.value=[]
+            fileList.value = []
             getTaglist()
           } else {
             ElMessage.error('添加错误')

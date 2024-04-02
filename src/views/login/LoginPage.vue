@@ -1,31 +1,63 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useTokenStore, useUserStore } from '@/stores'
-import { userLoginService } from '@/api/api.js'
+import { getPublickey, userLoginService } from '@/api/api.js'
 import { useRouter } from 'vue-router'
+import JSEncrypt from 'jsencrypt'
 
+const publickey = ref('')
+// 获取密钥函数
+onMounted(() => {
+  getPublickey().then((res) => {
+    publickey.value = res.data.publicKey
+  })
+})
 const LoginData = ref({
   uid: '',
   password: ''
 })
+const fullscreenLoading = ref(false)
 
 const router = useRouter()
+
 const login = async () => {
-  // 定义要发送的数据
-  const data = {
-    uid: LoginData.value.uid,
-    password: LoginData.value.password
+  // 进行非空判断
+  if (LoginData.value.uid === '' && LoginData.value.password === '') {
+    ElMessage({
+      showClose: true,
+      message: '请填写用户名和密码',
+      type: 'error',
+      center: true
+    })
   }
-  let res = await userLoginService(JSON.stringify(data))
-  console.log(res.data.msg)
-  if (res.data.msg == '用户名或密码错误')
+  console.log(LoginData.value.uid)
+  // 定义要发送的数据
+  var jsencrypt = new JSEncrypt()
+  jsencrypt.setPublicKey(publickey.value)
+  var id = jsencrypt.encrypt(LoginData.value.uid)
+  var passWord = jsencrypt.encrypt(LoginData.value.password)
+  const data = {
+    uid: id,
+    password: passWord,
+    publicKey: publickey.value
+  }
+  console.log(data)
+  let res = await userLoginService(data)
+  if (res.data.msg === '用户名或密码错误')
     ElMessage({
       showClose: true,
       message: '用户名或密码错误',
       type: 'error',
       center: true
     })
+
+  if (res.data.code === 200) {
+    fullscreenLoading.value = true
+    setTimeout(() => {
+      fullscreenLoading.value = false
+    }, 2000)
+  }
   const tokenStore = useTokenStore()
   const userStore = useUserStore()
   userStore.setUid(LoginData.value.uid)

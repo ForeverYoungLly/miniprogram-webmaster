@@ -4,6 +4,9 @@ import axios from 'axios'
 
 const tokenStore = useTokenStore()
 
+// 获取密钥
+export const getPublickey = () => request.post('/auth/manage/getKey')
+
 // 登录接口
 export const userLoginService = (data) =>
   request.post('/auth/manage/passwordLogin', data, {
@@ -140,7 +143,7 @@ export const delAdmin = (data) =>
 export const getTags = () => request.get('/tag/list')
 
 // 新增标签
-export const addTag = (data) => 
+export const addTag = (data) =>
   request.post('/tag/manage/add', data, {
     headers: {
       access_token: tokenStore.accessToken,
