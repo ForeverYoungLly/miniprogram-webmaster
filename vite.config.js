@@ -14,6 +14,7 @@ export default defineConfig({
       },
       mangle: true,
       keep_fnames: false, // 混淆变量名
+      reserved: false,
       output: {
         comments: false // 移除注释
       }

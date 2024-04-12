@@ -5,9 +5,9 @@ import { GridComponent } from 'echarts/components'
 import { BarChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
 echarts.use([GridComponent, BarChart, CanvasRenderer])
-import { showData ,postUser} from '../../api/api'
+import { showData, postUser } from '../../api/api'
 const UserNum = ref(0)
-const PostNum=ref(0)
+const PostNum = ref(0)
 
 onMounted(() => {
   let tagName = ref([])
@@ -19,7 +19,7 @@ onMounted(() => {
       res.data.forEach((item) => {
         tagName.value.push(item.tagName)
         tagNum.value.push(item.total)
-        PostNum.value+=item.total
+        PostNum.value += item.total
       })
       const option = {
         xAxis: {
@@ -44,24 +44,26 @@ onMounted(() => {
       ElMessage.error('获取失败')
       console.log(err)
     })
-    let data={
-      pageNum:1,
-      pageSize:1
-    }
-    postUser(data).then(res=>{
-      UserNum.value=res.data.total
+  let data = {
+    pageNum: 1,
+    pageSize: 1
+  }
+  postUser(data)
+    .then((res) => {
+      UserNum.value = res.data.total
       console.log(res)
-    }).catch(err=>{
+    })
+    .catch((err) => {
       console.log(err)
       ElMessage.error('获取失败')
     })
-    // showPost(data).then(res=>{
-    //   PostNum.value=res.data.total
-    //   console.log(res)
-    // }).catch(err=>{
-    //   console.log(err)
-    //   ElMessage.error('获取失败')
-    // })
+  // showPost(data).then(res=>{
+  //   PostNum.value=res.data.total
+  //   console.log(res)
+  // }).catch(err=>{
+  //   console.log(err)
+  //   ElMessage.error('获取失败')
+  // })
 })
 </script>
 <style scoped>

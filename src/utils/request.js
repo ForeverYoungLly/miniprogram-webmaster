@@ -8,13 +8,14 @@ import request from '@/utils/request'
 
 const instance = axios.create({
   // TODO 1. 基础地址，超时时间
-  baseURL: 'http://8.146.208.139:10010',
+  baseURL: 'https://meet.ysyxmy.top',
   timeout: 10000
 })
 
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
+    console.log(config)
     return config
   },
   (err) => Promise.reject(err)
