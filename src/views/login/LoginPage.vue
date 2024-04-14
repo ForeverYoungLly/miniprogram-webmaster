@@ -116,7 +116,18 @@ const login = async () => {
 
 <style lang="scss" scoped>
 .bigBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 1000px;
   background: url('https://file.51pptmoban.com/d/file/2017/02/23/c05b203024cf5991cb35dab95b4f45d3.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-position: center 0;
 }
 .login-page {
   height: 100vh;

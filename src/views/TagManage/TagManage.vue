@@ -20,7 +20,7 @@ const beforePicUpload = (uploadfile) => {
 const getTaglist = () => {
   dynamicTags.value = []
   axios
-    .get('http://8.146.208.139:10010/tag/list')
+    .get('https://meet.ysyxmy.top/tag/list')
     .then((response) => {
       response.data.data.forEach(function (element) {
         dynamicTags.value.push({
@@ -78,7 +78,7 @@ const upload = () => {
     // 发起上传请求
     axios({
       method: 'POST',
-      url: 'http://8.146.208.139:3000/upload',
+      url: 'https://meet.ysyxmy.top/upload',
       data: formData
     }).then((res) => {
       console.log(res.data.data)
@@ -173,7 +173,7 @@ onMounted(() => {
         placeholder="请输入标签名"
       />
       <el-upload
-        action="http://8.146.208.139:3000/upload"
+        action="https://meet.ysyxmy.top/upload"
         method="post"
         v-model:file-list="fileList"
         list-type="picture-card"

@@ -1,7 +1,7 @@
 <template>
   <page-contain title="展示管理">
     <el-upload
-      action="http://8.146.208.139:3000/upload"
+      action="https://meet.ysyxmy.top/upload"
       method="post"
       v-model:file-list="fileList"
       list-type="picture-card"
@@ -86,7 +86,7 @@ const uploadImg = async (raw) => {
 
     // 发起上传请求
     const uploadResponse = await axios.post(
-      'http://8.146.208.139:3000/upload',
+      'https://meet.ysyxmy.top/upload',
       formData
     )
     const imgUrl = uploadResponse.data.data
